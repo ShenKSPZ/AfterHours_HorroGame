@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         StateCheck();
 
         #region InputCheck
-        if (Input.GetButtonDown("Jump") && OnGround)
+        if (Input.GetButtonDown("Jump") && OnGround && ObjectGrabed == null)
         {
             Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
         }
