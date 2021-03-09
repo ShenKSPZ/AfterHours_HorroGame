@@ -234,10 +234,12 @@ public class PlayerController : MonoBehaviour
         };
 
         bool Detected = false;
+        bool CollideSomething = false;
         for (int i = 0; i < hits.Length; i++)
         {
             if(hits[i].collider != null)
             {
+                CollideSomething = true;
                 if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
                 {
                     OnGroundRadius = hits[i].normal.SignedAngle() * Mathf.Deg2Rad;
@@ -246,7 +248,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(i == hits.Length - 1 && !Detected)
+            if(i == hits.Length - 1 && !CollideSomething)
             {
                 Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + GroundOffset, GroundSize, 0, GroundLayer | InteractableLayer);
                 Detected = coll != null ? true : false;
