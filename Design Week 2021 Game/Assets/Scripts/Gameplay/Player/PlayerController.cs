@@ -77,6 +77,16 @@ public class PlayerController : MonoBehaviour
     {
         StateCheck();
 
+        #region Grabbing
+        ObjectGrabed = null;
+
+        if (Input.GetButton("Grab"))
+        {
+            Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y), GrabSize, 0f, InteractableLayer);
+            ObjectGrabed = coll != null ? coll.gameObject : null;
+        }
+        #endregion
+
         #region Moving
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
@@ -163,18 +173,6 @@ public class PlayerController : MonoBehaviour
             IsJumped = true;
             LeaveGround = false;
             Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
-        }
-        #endregion
-
-        #region Grabbing
-        if (Input.GetButton("Grab"))
-        {
-            Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y), GrabSize, 0f, InteractableLayer);
-            ObjectGrabed = coll != null ? coll.gameObject : null;
-        }
-        else if (Input.GetButtonUp("Grab"))
-        {
-            ObjectGrabed = null;
         }
         #endregion
 
