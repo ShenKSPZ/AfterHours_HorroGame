@@ -77,6 +77,17 @@ namespace FunctionExtend
         {
             return Vector2.SignedAngle(Vector2.up, v);
         }
+
+        /// <summary>
+        /// Input a angle between 0~360 and return a unit Vector2 which Vector2.up as 0 degree;
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static Vector2 AngleToVector2(this float angle)
+        {
+            angle *= Mathf.Deg2Rad;
+            return new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+        }
     }
 
 }
