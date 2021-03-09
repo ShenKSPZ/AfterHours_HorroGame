@@ -221,12 +221,6 @@ public class PlayerController : MonoBehaviour
         return velocity;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        //StateCheck();
-    }
-
     bool IsOnGround()
     {
         Vector2 LeftPos = new Vector2(transform.position.x - (Box.size.x / 2), transform.position.y - (Box.size.y / 2));
