@@ -390,6 +390,11 @@ public class PlayerController : MonoBehaviour
             Physics2D.Raycast(transform.position - new Vector3(0, Box.size.y / 2,  0) + (Vector3)Box.offset, Vector2.right, DetectingRayLength, GroundLayer),
         };
 
+        RaycastHit2D[] InnerHits = new RaycastHit2D[] {
+            Physics2D.Raycast(LeftPos, Vector2.right, DetectingRayLength, GroundLayer),
+            Physics2D.Raycast(RightPos, Vector2.left, DetectingRayLength, GroundLayer),
+        };
+
         bool Detected = false;
         bool CollideSomething = false;
         for (int i = 0; i < hits.Length; i++)
@@ -409,6 +414,15 @@ public class PlayerController : MonoBehaviour
             {
                 Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
                 Detected = coll != null ? true : false;
+            }
+        }
+
+        for (int i = 0; i < InnerHits.Length; i++)
+        {
+            if(InnerHits[i].collider != null)
+            {
+                Detected = false;
+                break;
             }
         }
 
