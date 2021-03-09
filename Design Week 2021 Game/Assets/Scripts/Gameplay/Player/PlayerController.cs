@@ -336,9 +336,9 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         #region CanClimbCheck
-        RaycastHit2D BodyHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0 ,0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
+        Collider2D BodyHit = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, GroundLayer);
         RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
-        if(BodyHit.collider != null && HeadHit.collider == null && !WaitForClimb && State == PlayerState.Free)
+        if(BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
         {
             WaitForClimb = true;
         }
