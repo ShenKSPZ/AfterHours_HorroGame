@@ -10,7 +10,7 @@ public enum PlayerState
     Grabbing,
     StartJump,
     Jump,
-    Landing,
+    Landing
 }
 
 public class PlayerController : MonoBehaviour
