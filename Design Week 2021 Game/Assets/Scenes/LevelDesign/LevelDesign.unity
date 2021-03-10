@@ -1327,15 +1327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d016949ac641f5479c796ed1aaff004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 10
-  chaseSpeed: 15
-  catchDistance: 4
-  patrolMinPositionX: -22.16
-  patrolMaxPositionX: 37.48
-  checkingTime: 3
-  alertDelayTime: 3
-  player: {fileID: 366828228}
-  spriteRenderer: {fileID: 0}
 --- !u!114 &399098909
 MonoBehaviour:
   m_ObjectHideFlags: 0
