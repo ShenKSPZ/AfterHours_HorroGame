@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FunctionExtend;
+using UnityEngine.UI;
 
 public enum PlayerState
 {
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        //FMODUnity.RuntimeManager.PlayOneShot("event:/01D", transform.position);
         Rig = GetComponent<Rigidbody2D>();
         SR = GetComponent<SpriteRenderer>();
         Box = GetComponent<BoxCollider2D>();
@@ -121,18 +123,6 @@ public class PlayerController : MonoBehaviour
                 #region Moving
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    //if (ObjectGrabed != null)
-                    //{
-                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                    //    if (SR.flipX)
-                    //        MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                    //    else
-                    //        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    //}
-                    //else
-                    //{
-                    //}
                     MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
                     SR.flipX = false;
 
@@ -151,18 +141,6 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
-                    //if (ObjectGrabed != null)
-                    //{
-                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                    //    if (!SR.flipX)
-                    //        MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                    //    else
-                    //        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    //}
-                    //else
-                    //{
-                    //}
                     MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
                     SR.flipX = true;
 
@@ -181,16 +159,6 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    //if (ObjectGrabed != null)
-                    //{
-                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), OtherRig.velocity.y);
-                    //    MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    //}
-                    //else
-                    //{
-                    //}
-
                     MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, 0, ref DampVelocity1, DecelerateSpeed), MovingDirection.y);
 
                     if (ActualOnGround && !IsJumped)
@@ -505,7 +473,7 @@ public class PlayerController : MonoBehaviour
                 Gizmos.DrawWireCube(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1) + ClimbingBoxOffset.x * (SR.flipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y));
 
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
+                //Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
                 Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
             }
         }

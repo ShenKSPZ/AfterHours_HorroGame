@@ -89,5 +89,4 @@ namespace FunctionExtend
             return new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
         }
     }
-
 }
