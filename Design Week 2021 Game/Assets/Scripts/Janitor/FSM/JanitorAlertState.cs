@@ -8,7 +8,6 @@ public class JanitorAlertState : JanitorBaseState
     public override void Init(GameObject _owner, FSM _fsm)
     {
         base.Init(_owner, _fsm);
-
         // some animation action listener can be added here
     }
 
