@@ -386,9 +386,6 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 768
-  HideLayer:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!212 &94743800
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1188,8 +1185,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1420018521}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.17, y: -2.07, z: 0}
-  m_LocalScale: {x: 2.556303, y: 2.4132993, z: 1}
+  m_LocalPosition: {x: -0.17, y: -1.688, z: 0}
+  m_LocalScale: {x: 2.556303, y: 3.1772892, z: 1}
   m_Children:
   - {fileID: 157730449}
   m_Father: {fileID: 1977086579}
@@ -1393,9 +1390,6 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 768
-  HideLayer:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!50 &1619737675
 Rigidbody2D:
   serializedVersion: 4
@@ -1441,7 +1435,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.57, y: 1.0813708}
+  m_Size: {x: 0.5, y: 1.0813708}
   m_EdgeRadius: 0
 --- !u!95 &1619737677
 Animator:
