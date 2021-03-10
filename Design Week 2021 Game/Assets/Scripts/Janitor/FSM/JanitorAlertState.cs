@@ -5,7 +5,6 @@ using UnityEngine;
 public class JanitorAlertState : JanitorBaseState
 {
     private float currentWait = 0.0f;
-    private float currentCheckingTime = 0.0f;
     public override void Init(GameObject _owner, FSM _fsm)
     {
         base.Init(_owner, _fsm);
@@ -16,7 +15,6 @@ public class JanitorAlertState : JanitorBaseState
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         currentWait = 0.0f;
-        currentCheckingTime = 0.0f;
         controller.spriteRenderer.color = Color.yellow;
     }
 
