@@ -1203,8 +1203,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1901919591
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 4723107735738678597, guid: df100a23b479a52418a4b7fadfbee434,
     type: 3}
@@ -1288,8 +1288,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -234985189
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9a0607d39cc54094fb1ba70bbbb411b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.95686275}
@@ -1328,6 +1328,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d016949ac641f5479c796ed1aaff004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolSpeed: 2
+  chaseSpeed: 4
+  catchDistance: 4
+  patrolMinPositionX: 0
+  patrolMaxPositionX: 10
+  checkingTime: 3
+  alertDelayTime: 2
+  player: {fileID: 366828228}
+  spriteRenderer: {fileID: 0}
 --- !u!114 &399098909
 MonoBehaviour:
   m_ObjectHideFlags: 0
