@@ -336,8 +336,6 @@ public class PlayerController : MonoBehaviour
             Rig.gravityScale = 1;
         }
         #endregion
-
-        
     }
 
     private void FixedUpdate()
