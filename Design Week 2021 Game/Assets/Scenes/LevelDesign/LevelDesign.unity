@@ -1144,7 +1144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
-  DetectingRayLength: 0.04
+  DetectingRayLength: 0.03
   MovingSpeed: 5
   AccelerateSpeed: 0.09
   DecelerateSpeed: 0.05
@@ -1159,8 +1159,8 @@ MonoBehaviour:
     m_Bits: 512
   AfterClimbingOffset: {x: 0.5, y: 1.37}
   ClimbingBoxOffset: {x: 0, y: 0}
-  ClimbingBoxSize: {x: 0, y: 0}
-  GroundSize: {x: 0.98, y: 0.1}
+  ClimbingBoxSize: {x: 0, y: 0.9}
+  GroundSize: {x: 0.98, y: 0.001}
   GroundOffset: {x: 0, y: 0}
   MaxSlope: 50
   GroundLayer:
@@ -1327,15 +1327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d016949ac641f5479c796ed1aaff004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 10
-  chaseSpeed: 15
-  catchDistance: 4
-  patrolMinPositionX: -22.16
-  patrolMaxPositionX: 37.48
-  checkingTime: 3
-  alertDelayTime: 3
-  player: {fileID: 366828228}
-  spriteRenderer: {fileID: 0}
 --- !u!114 &399098909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3511,7 +3502,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600006361}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 40.09, y: 7.138, z: 2.831368}
+  m_LocalPosition: {x: 42.15, y: 7.138, z: 2.831368}
   m_LocalScale: {x: 1.184391, y: 23.78217, z: 1}
   m_Children: []
   m_Father: {fileID: 1825153540}
