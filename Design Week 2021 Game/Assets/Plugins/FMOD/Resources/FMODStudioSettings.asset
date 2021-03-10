@@ -324,9 +324,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef8d824ea7b63742966aaa0e94ac383, type: 3}
+  m_Script: {fileID: 0}
   m_Name: FMODStudioSettings
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: FMODUnity:FMODUnity:Settings
   SwitchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
@@ -350,8 +350,7 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks:
-  - Master
+  MasterBanks: []
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
@@ -360,7 +359,7 @@ MonoBehaviour:
   MeterChannelOrdering: 0
   StopEventsOutsideMaxDistance: 0
   BoltUnitOptionsBuildPending: 0
-  MigratedPlatforms: 0c000000150000000b0000000a00000009000000120000000800000005000000060000000200000001000000
+  MigratedPlatforms: 0a00000009000000080000000500000006000000120000000b0000000c000000150000000200000001000000
 --- !u!114 &1646510667896384622
 MonoBehaviour:
   m_ObjectHideFlags: 0
