@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Climbing")]
     public Vector2 AfterClimbingOffset;
+    public Vector2 ClimbingBoxOffset;
+    public Vector2 ClimbingBoxSize;
 
     [Header("GroundDetect")]
     public Vector2 GroundSize = Vector2.zero;
@@ -71,8 +73,8 @@ public class PlayerController : MonoBehaviour
     GameObject ObjectGrabed = null;
 
     //Climbing
-    public bool WaitForClimb  = false;
-    public bool CanClimb  = false;
+    bool WaitForClimb = false;
+    bool CanClimb = false;
     #endregion
 
     // Start is called before the first frame update
@@ -93,9 +95,9 @@ public class PlayerController : MonoBehaviour
         {
             case PlayerState.Free:
                 Anim.Idle(false);
-                if(CanClimb)
+                if (CanClimb)
                 {
-                    if(Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !SR.flipX) || (Input.GetAxisRaw("Horizontal") < 0 && SR.flipX))
+                    if (Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !SR.flipX) || (Input.GetAxisRaw("Horizontal") < 0 && SR.flipX))
                     {
                         GoState(PlayerState.Climbing);
                     }
@@ -335,29 +337,12 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
-        #region CanClimbCheck
-        Collider2D BodyHit = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, GroundLayer);
-        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
-        if(BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
-        {
-            WaitForClimb = true;
-        }
-        else if(HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
-        {
-            CanClimb = true;
-            WaitForClimb = false;
-        }
-        else
-        {
-            CanClimb = false;
-            WaitForClimb = false;
-        }
-        #endregion
+        
     }
 
     private void FixedUpdate()
     {
-        if(!ActualOnGround)
+        if (!ActualOnGround)
         {
             if (Rig.velocity.y < 0)
             {
@@ -368,6 +353,25 @@ public class PlayerController : MonoBehaviour
                 Rig.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
             }
         }
+
+        #region CanClimbCheck
+        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1) + ClimbingBoxOffset.x * (SR.flipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
+        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
+        if (BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
+        {
+            WaitForClimb = true;
+        }
+        else if (BodyHit != null && HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
+        {
+            CanClimb = true;
+            WaitForClimb = false;
+        }
+        else
+        {
+            CanClimb = false;
+            WaitForClimb = false;
+        }
+        #endregion
     }
 
     Vector2 ClampSlop(Vector2 velocity)
@@ -399,7 +403,7 @@ public class PlayerController : MonoBehaviour
         bool CollideSomething = false;
         for (int i = 0; i < hits.Length; i++)
         {
-            if(hits[i].collider != null)
+            if (hits[i].collider != null)
             {
                 CollideSomething = true;
                 if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
@@ -410,7 +414,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(i == hits.Length - 1 && !CollideSomething)
+            if (i == hits.Length - 1 && !CollideSomething)
             {
                 Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
                 Detected = coll != null ? true : false;
@@ -419,19 +423,18 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < InnerHits.Length; i++)
         {
-            if(InnerHits[i].collider != null)
+            if (InnerHits[i].collider != null)
             {
                 Detected = false;
                 break;
             }
         }
-
         return Detected;
     }
 
     void GoState(PlayerState next)
     {
-        if(State == PlayerState.Climbing)
+        if (State == PlayerState.Climbing)
         {
             StartCoroutine(WaitForClimbingFinish(next));
         }
@@ -467,12 +470,16 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireCube((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size);
         }
 
-        if(SR != null)
+        if (SR != null)
         {
             Gizmos.DrawWireCube((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size);
-            
-            if(Box != null)
+
+            if (Box != null)
             {
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1) + ClimbingBoxOffset.x * (SR.flipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y));
+
+                Gizmos.color = Color.red;
                 Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
                 Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
             }
