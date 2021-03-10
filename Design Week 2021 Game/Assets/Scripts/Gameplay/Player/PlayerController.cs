@@ -8,9 +8,6 @@ public enum PlayerState
     Free,
     Climbing,
     Grabbing,
-    StartJump,
-    Jump,
-    Landing,
 }
 
 public class PlayerController : MonoBehaviour
@@ -75,6 +72,10 @@ public class PlayerController : MonoBehaviour
     //Climbing
     bool WaitForClimb = false;
     bool CanClimb = false;
+
+    //Hide
+    [HideInInspector]
+    public bool Hide = false;
     #endregion
 
     // Start is called before the first frame update
@@ -94,7 +95,8 @@ public class PlayerController : MonoBehaviour
         switch (State)
         {
             case PlayerState.Free:
-                Anim.Idle(false);
+
+                #region Climbing
                 if (CanClimb)
                 {
                     if (Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !SR.flipX) || (Input.GetAxisRaw("Horizontal") < 0 && SR.flipX))
@@ -102,6 +104,8 @@ public class PlayerController : MonoBehaviour
                         GoState(PlayerState.Climbing);
                     }
                 }
+                #endregion
+
                 #region Grabbing
                 if (Input.GetButton("Grab"))
                 {
@@ -115,20 +119,20 @@ public class PlayerController : MonoBehaviour
                 #region Moving
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (SR.flipX)
-                            MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                        else
-                            MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = false;
-                    }
+                    //if (ObjectGrabed != null)
+                    //{
+                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
+                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
+                    //    if (SR.flipX)
+                    //        MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
+                    //    else
+                    //        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
+                    //}
+                    //else
+                    //{
+                    //}
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
+                    SR.flipX = false;
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -139,23 +143,25 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Run(false);
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (!SR.flipX)
-                            MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                        else
-                            MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = true;
-                    }
+                    //if (ObjectGrabed != null)
+                    //{
+                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
+                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
+                    //    if (!SR.flipX)
+                    //        MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
+                    //    else
+                    //        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
+                    //}
+                    //else
+                    //{
+                    //}
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
+                    SR.flipX = true;
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -166,19 +172,22 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Run(false);
                 }
                 else
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), OtherRig.velocity.y);
-                        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, 0, ref DampVelocity1, DecelerateSpeed), MovingDirection.y);
-                    }
+                    //if (ObjectGrabed != null)
+                    //{
+                    //    Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
+                    //    OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), OtherRig.velocity.y);
+                    //    MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
+                    //}
+                    //else
+                    //{
+                    //}
+
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, 0, ref DampVelocity1, DecelerateSpeed), MovingDirection.y);
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -189,6 +198,8 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Idle(false);
                 }
                 #endregion
 
@@ -249,6 +260,8 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Run(true, SR.flipX);
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
@@ -276,6 +289,8 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Run(true, SR.flipX);
                 }
                 else
                 {
@@ -299,14 +314,10 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), Rig.velocity.y);
                     }
+
+                    Anim.Idle(true);
                 }
                 #endregion
-                break;
-            case PlayerState.StartJump:
-                break;
-            case PlayerState.Jump:
-                break;
-            case PlayerState.Landing:
                 break;
             default:
                 break;
@@ -484,4 +495,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 #endif
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        OnTriggerStay2D(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("HIdeable"))
+        {
+            Hide = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("HIdeable"))
+        {
+            Hide = false;
+        }
+    }
 }

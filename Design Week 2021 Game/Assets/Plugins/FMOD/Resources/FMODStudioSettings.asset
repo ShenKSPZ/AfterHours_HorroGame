@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: FMODStudioSettings
   m_EditorClassIdentifier: 
   SwitchSettingsMigration: 1
-  HasSourceProject: 1
+  HasSourceProject: 0
   HasPlatforms: 1
   sourceProjectPath: FMOD/DW2021Winter/DW2021Winter.fspro
   sourceBankPath: FMOD\DW2021Winter\Build
