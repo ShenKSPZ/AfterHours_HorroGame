@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Runtime
+    bool LastOnGround = false;
+
     //Velocity
     Vector2 MovingDirection = Vector2.zero;
     float DampVelocity1 = 0;
@@ -107,7 +109,7 @@ public class PlayerController : MonoBehaviour
                 #endregion
 
                 #region Grabbing
-                if (Input.GetButton("Grab"))
+                if (Input.GetButton("Grab") && ActualOnGround)
                 {
                     Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
@@ -138,13 +140,14 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.gravityScale = 0;
                         Rig.velocity = ClampSlop(MovingDirection);
+                        Anim.Run(false);
                     }
                     else
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
+                        Anim.Fall();
                     }
 
-                    Anim.Run(false);
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
@@ -167,13 +170,14 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.gravityScale = 0;
                         Rig.velocity = ClampSlop(MovingDirection);
+                        Anim.Run(false);
                     }
                     else
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), Rig.velocity.y);
+                        Anim.Fall();
                     }
 
-                    Anim.Run(false);
                 }
                 else
                 {
@@ -193,13 +197,17 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.gravityScale = 0;
                         Rig.velocity = ClampSlop(MovingDirection);
+                        if (!LastOnGround)
+                            Anim.Idle(false, true);
+                        else
+                            Anim.Idle(false, false);
                     }
                     else
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), Rig.velocity.y);
+                        Anim.Fall();
                     }
 
-                    Anim.Idle(false);
                 }
                 #endregion
 
@@ -209,8 +217,10 @@ public class PlayerController : MonoBehaviour
                     IsJumped = true;
                     LeaveGround = false;
                     Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
+                    Anim.Jump();
                 }
                 #endregion
+
                 break;
             case PlayerState.Climbing:
                 MovingDirection = Vector2.zero;
@@ -219,8 +229,9 @@ public class PlayerController : MonoBehaviour
                 Anim.Climb();
                 break;
             case PlayerState.Grabbing:
+
                 #region Grabbing
-                if (Input.GetButton("Grab"))
+                if (Input.GetButton("Grab") && ActualOnGround)
                 {
                     Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
@@ -314,14 +325,19 @@ public class PlayerController : MonoBehaviour
                     {
                         Rig.velocity = new Vector2(Mathf.SmoothDamp(Rig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), Rig.velocity.y);
                     }
-
-                    Anim.Idle(true);
+                    if(!LastOnGround && ActualOnGround)
+                        Anim.Idle(true, true);
+                    else
+                        Anim.Idle(true, false);
                 }
                 #endregion
+
                 break;
             default:
                 break;
         }
+
+        LastOnGround = ActualOnGround;
     }
 
     void StateCheck()

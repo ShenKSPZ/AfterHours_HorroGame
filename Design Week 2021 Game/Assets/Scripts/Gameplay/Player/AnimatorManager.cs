@@ -12,6 +12,8 @@ public class AnimatorManager : MonoBehaviour
     readonly int m_Idle = Animator.StringToHash("Idle");
     readonly int m_Run = Animator.StringToHash("Run");
     readonly int m_Jump = Animator.StringToHash("Jump");
+    readonly int m_Fall = Animator.StringToHash("Fall");
+    readonly int m_Land = Animator.StringToHash("Land");
     readonly int m_Climb = Animator.StringToHash("Climb");
     readonly int m_Grab = Animator.StringToHash("Grab");
     readonly int m_GrabWalkBack = Animator.StringToHash("GrabWalkBack");
@@ -34,6 +36,13 @@ public class AnimatorManager : MonoBehaviour
         anim.Play(m_Jump, 0);
     }
 
+    public void Fall()
+    {
+        AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+        if (!info.IsName("Jump"))
+            anim.Play(m_Fall, 0);
+    }
+
     public void Run(bool Grabbing, bool flipX = false)
     {
         if (!Grabbing)
@@ -53,15 +62,19 @@ public class AnimatorManager : MonoBehaviour
         }
     }
 
-    public void Idle(bool Grabbing)
+    public void Idle(bool Grabbing, bool isLanding)
     {
-        if (!Grabbing)
+        if (isLanding)
         {
-            anim.Play(m_Idle, 0);
+            anim.Play(m_Land, 0);
         }
         else
         {
-            anim.Play(m_Grab, 0);
+            AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+            if (!info.IsName("Land"))
+            {
+                anim.Play(Grabbing ? m_Grab : m_Idle, 0);
+            }
         }
     }
 }
