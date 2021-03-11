@@ -49,12 +49,13 @@ public class PlayerController : MonoBehaviour
 
     #region Reference
     AnimatorManager Anim;
-    SpriteRenderer SR;
     Rigidbody2D Rig;
     BoxCollider2D Box;
     #endregion
 
     #region Runtime
+    bool FlipX = false;
+
     //Velocity
     Vector2 MovingDirection = Vector2.zero;
     float DampVelocity1 = 0;
@@ -81,7 +82,6 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         Rig = GetComponent<Rigidbody2D>();
-        SR = GetComponent<SpriteRenderer>();
         Box = GetComponent<BoxCollider2D>();
         Anim = GetComponent<AnimatorManager>();
     }
@@ -94,10 +94,9 @@ public class PlayerController : MonoBehaviour
         switch (State)
         {
             case PlayerState.Free:
-                Anim.Idle(false);
                 if (CanClimb)
                 {
-                    if (Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !SR.flipX) || (Input.GetAxisRaw("Horizontal") < 0 && SR.flipX))
+                    if (Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !FlipX) || (Input.GetAxisRaw("Horizontal") < 0 && FlipX))
                     {
                         GoState(PlayerState.Climbing);
                     }
@@ -105,7 +104,7 @@ public class PlayerController : MonoBehaviour
                 #region Grabbing
                 if (Input.GetButton("Grab"))
                 {
-                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
                     if (ObjectGrabed != null)
                         GoState(PlayerState.Grabbing);
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (SR.flipX)
+                        if (FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -127,7 +126,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = false;
+                        FlipX = false;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -146,7 +145,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (!SR.flipX)
+                        if (!FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -154,7 +153,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = true;
+                        FlipX = true;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -211,7 +210,7 @@ public class PlayerController : MonoBehaviour
                 #region Grabbing
                 if (Input.GetButton("Grab"))
                 {
-                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
                     if (ObjectGrabed == null)
                         GoState(PlayerState.Free);
@@ -229,7 +228,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (SR.flipX)
+                        if (FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -237,7 +236,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = false;
+                        FlipX = false;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -256,7 +255,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (!SR.flipX)
+                        if (!FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -264,7 +263,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = true;
+                        FlipX = true;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -311,6 +310,11 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+
+        if (FlipX)
+            transform.eulerAngles = Vector3.zero;
+        else
+            transform.eulerAngles = new Vector3(0, 180, 0);
     }
 
     void StateCheck()
@@ -353,8 +357,8 @@ public class PlayerController : MonoBehaviour
         }
 
         #region CanClimbCheck
-        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1) + ClimbingBoxOffset.x * (SR.flipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
-        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
+        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
+        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, FlipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
         if (BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
         {
             WaitForClimb = true;
@@ -445,7 +449,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator WaitForClimbingFinish(PlayerState next)
     {
         yield return new WaitForEndOfFrame();
-        transform.position += new Vector3(AfterClimbingOffset.x * (SR.flipX ? -1 : 1), AfterClimbingOffset.y);
+        transform.position += new Vector3(AfterClimbingOffset.x * (FlipX ? -1 : 1), AfterClimbingOffset.y);
         Rig.isKinematic = false;
         State = next;
     }
@@ -466,21 +470,14 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawLine(transform.position - new Vector3(0, Box.size.y / 2, 0) + (Vector3)Box.offset, transform.position - new Vector3(0, Box.size.y / 2, 0) + (Vector3)Box.offset - new Vector3(0, DetectingRayLength));
 
             Gizmos.DrawWireCube((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size);
-        }
 
-        if (SR != null)
-        {
-            Gizmos.DrawWireCube((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size);
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireCube(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y));
 
-            if (Box != null)
-            {
-                Gizmos.color = Color.black;
-                Gizmos.DrawWireCube(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1) + ClimbingBoxOffset.x * (SR.flipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y));
-
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
-                Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
-            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (FlipX ? -1 : 1), 0));
+            Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (FlipX ? -1 : 1), 0));
+            Gizmos.DrawWireCube((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size);
         }
     }
 #endif

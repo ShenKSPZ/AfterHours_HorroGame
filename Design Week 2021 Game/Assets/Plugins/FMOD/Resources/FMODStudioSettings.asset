@@ -126,7 +126,7 @@ MonoBehaviour:
   threadAffinities:
     Value: []
     HasValue: 0
---- !u!114 &-442640778138959916
+--- !u!114 &-1773433237451746310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,8 +147,8 @@ MonoBehaviour:
       Value: 1
       HasValue: 1
     LiveUpdatePort:
-      Value: 9264
-      HasValue: 1
+      Value: 0
+      HasValue: 0
     Overlay:
       Value: 1
       HasValue: 1

@@ -6,13 +6,6 @@ public class AnimatorManager : MonoBehaviour
 {
 
     Animator anim;
-    AnimatorStateInfo Info;
-
-    #region NameHash
-    readonly int m_Idle = Animator.StringToHash("Idle");
-    readonly int m_Run = Animator.StringToHash("Run");
-    readonly int m_Climb = Animator.StringToHash("Climb");
-    #endregion
 
     // Start is called before the first frame update
     void Awake()
@@ -22,21 +15,23 @@ public class AnimatorManager : MonoBehaviour
 
     public void Climb()
     {
-        anim.Play(m_Climb, 0);
+        anim.SetTrigger("Climb");
     }
 
     public void Jump()
     {
-
+        anim.SetTrigger("Jump");
     }
 
-    public void Run(bool Grabbing)
+    public void OnGround(bool OnGround)
     {
-
+        anim.SetBool("OnGround", OnGround);
     }
 
-    public void Idle(bool Grabbing)
+    public void Locomotion(float MovingSpeed, bool IsHide, bool Grabing = false)
     {
-        anim.Play(m_Idle, 0);
+        anim.SetBool("Grabing", Grabing);
+        anim.SetFloat("MovingSpeed", MovingSpeed);
+        anim.SetBool("IsHide", IsHide);
     }
 }
