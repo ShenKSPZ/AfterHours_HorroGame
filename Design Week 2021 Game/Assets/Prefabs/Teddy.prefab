@@ -130,8 +130,8 @@ MonoBehaviour:
   - {fileID: 8663595404029885444}
   - {fileID: 4665777046294333373}
   m_Bounds:
-    m_Center: {x: -0.6885458, y: 1.9876196, z: 0}
-    m_Extent: {x: 0.67613995, y: 0.98849505, z: 0}
+    m_Center: {x: -0.68855345, y: 1.9876199, z: 0}
+    m_Extent: {x: 0.67613995, y: 0.9884948, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &1346342364192148728
@@ -266,7 +266,7 @@ MonoBehaviour:
   - {fileID: 8663595404029885444}
   - {fileID: 8570762471174476246}
   m_Bounds:
-    m_Center: {x: -0.51654905, y: -1.5751553, z: 0}
+    m_Center: {x: -0.51655287, y: -1.5751543, z: 0}
     m_Extent: {x: 0.37717503, y: 0.6750002, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -372,7 +372,7 @@ MonoBehaviour:
   - {fileID: 8663595404029885444}
   - {fileID: 8570762471174476246}
   m_Bounds:
-    m_Center: {x: 0.43897974, y: -1.8654661, z: 0}
+    m_Center: {x: 0.43897593, y: -1.8654652, z: 0}
     m_Extent: {x: 1.02737, y: 1.115335, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -572,6 +572,7 @@ MonoBehaviour:
   State: 0
   DetectingRayLength: 0.02
   MovingSpeed: 5
+  HidingMovingSpeed: 3.8
   AccelerateSpeed: 0.09
   DecelerateSpeed: 0.05
   JumpingSpeed: 7
@@ -592,6 +593,9 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 768
+  OnGround: 0
+  ActualOnGround: 0
+  OnGroundRadius: 0
   Hide: 0
 --- !u!1 &4653921307479352765
 GameObject:
@@ -893,7 +897,7 @@ MonoBehaviour:
   - {fileID: 5668970372382730454}
   - {fileID: 8663595404029885444}
   m_Bounds:
-    m_Center: {x: -0.5333202, y: -4.3433146, z: 0}
+    m_Center: {x: -0.533324, y: -4.343314, z: 0}
     m_Extent: {x: 0.85345006, y: 0.4749999, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -1029,8 +1033,8 @@ MonoBehaviour:
   - {fileID: 8136953667167037553}
   - {fileID: 5668970372382730454}
   m_Bounds:
-    m_Center: {x: 0.6400693, y: -10.356611, z: 0}
-    m_Extent: {x: 0.62590814, y: 0.40352964, z: 0}
+    m_Center: {x: 0.6400636, y: -10.356611, z: 0}
+    m_Extent: {x: 0.62591004, y: 0.40352964, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &8445150744476039007
@@ -1135,8 +1139,8 @@ MonoBehaviour:
   - {fileID: 8570762471174476246}
   - {fileID: 8663595404029885444}
   m_Bounds:
-    m_Center: {x: 1.9756494, y: 2.8781643, z: 0}
-    m_Extent: {x: 0.51751494, y: 0.6227046, z: 0}
+    m_Center: {x: 1.9756474, y: 2.8781648, z: 0}
+    m_Extent: {x: 0.51751494, y: 0.62270534, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &8616339411722988301
