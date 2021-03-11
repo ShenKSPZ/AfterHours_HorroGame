@@ -96,7 +96,7 @@
 			<value>0.171875</value>
 		</property>
 		<property name="volume">
-			<value>-5</value>
+			<value>-9.5</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{529809bb-d11a-4beb-8722-63b39a8a33f8}</destination>
@@ -151,7 +151,7 @@
 			<value>volume</value>
 		</property>
 		<property name="amount">
-			<value>19.5</value>
+			<value>5.5</value>
 		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{3cfc0c74-5c4b-4f52-85cc-6523340a7c5a}">

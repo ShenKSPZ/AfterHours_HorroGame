@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.01.00">
 	<object class="Event" id="{71cd7a5c-7524-4a6c-89e4-9270a29ce154}">
 		<property name="name">
-			<value>janitorAlert</value>
+			<value>Alert</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -90,13 +90,13 @@
 	<object class="MixerBusPanner" id="{f62ec043-5e81-4746-981d-3a70bc6118ad}" />
 	<object class="SingleSound" id="{b8055bce-eedc-4841-9ddf-b393c45a7a66}">
 		<property name="length">
-			<value>16</value>
+			<value>6.8000000000000007</value>
 		</property>
 		<property name="volume">
-			<value>-4</value>
+			<value>-10.5</value>
 		</property>
 		<property name="pitch">
-			<value>-7</value>
+			<value>-2</value>
 		</property>
 		<relationship name="fadeOutCurve">
 			<destination>{4755056e-d6a3-43fc-bce7-3dbe61b4779b}</destination>
@@ -166,18 +166,18 @@
 	<object class="SpatialiserEffect" id="{1293876e-4b71-4d0e-b260-9f042a598940}" />
 	<object class="AutomationPoint" id="{430d1f82-9594-4178-bf48-916e3d876992}">
 		<property name="position">
-			<value>3.4140845594840918</value>
+			<value>0.20000000000000001</value>
 		</property>
 		<property name="value">
 			<value>1</value>
 		</property>
 		<property name="curveShape">
-			<value>0.25471893</value>
+			<value>0.051254265</value>
 		</property>
 	</object>
 	<object class="AutomationPoint" id="{0f06d635-6ecc-4a66-a35e-bc4cd2112556}">
 		<property name="position">
-			<value>16</value>
+			<value>6.8000000000000007</value>
 		</property>
 		<property name="value">
 			<value>0</value>

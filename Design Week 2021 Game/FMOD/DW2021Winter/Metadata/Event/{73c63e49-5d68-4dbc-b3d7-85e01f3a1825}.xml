@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.01.00">
 	<object class="Event" id="{73c63e49-5d68-4dbc-b3d7-85e01f3a1825}">
 		<property name="name">
-			<value>janitorGiveUp</value>
+			<value>GiveUp</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -90,13 +90,13 @@
 	<object class="MixerBusPanner" id="{9d35e74c-e1e0-4278-92bf-e2b2cb620d2c}" />
 	<object class="SingleSound" id="{a13f934a-e1c4-434b-b140-8ab276f290b5}">
 		<property name="length">
-			<value>9.3443300492610835</value>
+			<value>8.125</value>
 		</property>
 		<property name="volume">
-			<value>-7.5</value>
+			<value>-11.5</value>
 		</property>
 		<property name="pitch">
-			<value>2</value>
+			<value>3.4000001</value>
 		</property>
 		<relationship name="fadeOutCurve">
 			<destination>{21cbdedc-7430-4c71-a27b-1bb4d2cf52c2}</destination>
@@ -143,7 +143,7 @@
 	<object class="MixerBusFader" id="{a59fd47a-d09c-411f-a4a9-55a07ccd4723}" />
 	<object class="AutomationPoint" id="{c3b97858-3989-4b94-9f61-e2f01a645d9c}">
 		<property name="position">
-			<value>2.8443300492610835</value>
+			<value>1.625</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -154,7 +154,7 @@
 	</object>
 	<object class="AutomationPoint" id="{f8542eba-6829-44b5-9290-3204e31b37e3}">
 		<property name="position">
-			<value>9.3443300492610835</value>
+			<value>8.125</value>
 		</property>
 		<property name="value">
 			<value>0</value>
