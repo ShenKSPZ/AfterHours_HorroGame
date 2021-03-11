@@ -7,6 +7,8 @@ public class AnimatorManager : MonoBehaviour
 
     Animator anim;
 
+    float HidingSpeed = 0;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -15,12 +17,20 @@ public class AnimatorManager : MonoBehaviour
 
     public void Climb()
     {
-        anim.SetTrigger("Climb");
+        AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+        if (!info.IsName("TeddyClimb"))
+        {
+            anim.SetTrigger("Climb");
+        }
     }
 
     public void Jump()
     {
-        anim.SetTrigger("Jump");
+        AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+        if (!info.IsName("TeddyJump"))
+        {
+            anim.SetTrigger("Jump");
+        }
     }
 
     public void OnGround(bool OnGround)
@@ -32,6 +42,6 @@ public class AnimatorManager : MonoBehaviour
     {
         anim.SetBool("Grabing", Grabing);
         anim.SetFloat("MovingSpeed", MovingSpeed);
-        anim.SetBool("IsHide", IsHide);
+        anim.SetFloat("IsHide", Mathf.SmoothDamp(anim.GetFloat("IsHide"), IsHide? 1 : 0, ref HidingSpeed, 0.2f));
     }
 }
