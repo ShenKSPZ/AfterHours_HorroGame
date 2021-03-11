@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FunctionExtend;
+using UnityEngine.UI;
 
 public enum PlayerState
 {
     Free,
     Climbing,
     Grabbing,
-    StartJump,
-    Jump,
-    Landing,
 }
 
 public class PlayerController : MonoBehaviour
@@ -21,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public float DetectingRayLength = 1f;
     [Header("Movement")]
     public float MovingSpeed = 9;
+    public float HidingMovingSpeed = 3;
     public float AccelerateSpeed = 0.09f;
     public float DecelerateSpeed = 0.05f;
 
@@ -37,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Climbing")]
     public Vector2 AfterClimbingOffset;
+    public Vector2 ClimbingBoxOffset;
+    public Vector2 ClimbingBoxSize;
 
     [Header("GroundDetect")]
     public Vector2 GroundSize = Vector2.zero;
@@ -47,21 +48,24 @@ public class PlayerController : MonoBehaviour
 
     #region Reference
     AnimatorManager Anim;
-    SpriteRenderer SR;
     Rigidbody2D Rig;
     BoxCollider2D Box;
     #endregion
 
     #region Runtime
+    bool FlipX = false;
+    //bool LastOnGround = false;
+
     //Velocity
     Vector2 MovingDirection = Vector2.zero;
     float DampVelocity1 = 0;
+    float HighMovingSpeed = 0;
 
     //About Ground
-    bool OnGround = false;
-    bool ActualOnGround = false;
+    public bool OnGround = false;
+    public bool ActualOnGround = false;
     float LeftGrounded = 0f;
-    float OnGroundRadius = 0;
+    public float OnGroundRadius = 0;
 
     //Jumping
     bool IsJumped = false;
@@ -71,39 +75,51 @@ public class PlayerController : MonoBehaviour
     GameObject ObjectGrabed = null;
 
     //Climbing
-    public bool WaitForClimb  = false;
-    public bool CanClimb  = false;
+    bool WaitForClimb = false;
+    bool CanClimb = false;
+
+    //Hide
+    public bool Hide = false;
     #endregion
 
     // Start is called before the first frame update
     void Awake()
     {
+        //FMODUnity.RuntimeManager.PlayOneShot("event:/01D", transform.position);
         Rig = GetComponent<Rigidbody2D>();
-        SR = GetComponent<SpriteRenderer>();
         Box = GetComponent<BoxCollider2D>();
         Anim = GetComponent<AnimatorManager>();
+        HighMovingSpeed = MovingSpeed;
     }
 
     private void Update()
     {
         StateCheck();
+        if (FlipX)
+            transform.eulerAngles = Vector3.zero;
+        else
+            transform.eulerAngles = new Vector3(0, 180, 0);
+
         ObjectGrabed = null;
+        Anim.OnGround(ActualOnGround);
 
         switch (State)
         {
             case PlayerState.Free:
-                Anim.Idle(false);
-                if(CanClimb)
+                #region Climbing
+                if (CanClimb)
                 {
-                    if(Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !SR.flipX) || (Input.GetAxisRaw("Horizontal") < 0 && SR.flipX))
+                    if (Input.GetAxis("Jump") != 0 || (Input.GetAxisRaw("Horizontal") > 0 && !FlipX) || (Input.GetAxisRaw("Horizontal") < 0 && FlipX))
                     {
                         GoState(PlayerState.Climbing);
                     }
                 }
+                #endregion
+
                 #region Grabbing
-                if (Input.GetButton("Grab"))
+                if (Input.GetButton("Grab") && ActualOnGround)
                 {
-                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
                     if (ObjectGrabed != null)
                         GoState(PlayerState.Grabbing);
@@ -113,20 +129,8 @@ public class PlayerController : MonoBehaviour
                 #region Moving
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (SR.flipX)
-                            MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                        else
-                            MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = false;
-                    }
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
+                    FlipX = false;
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -140,20 +144,8 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (!SR.flipX)
-                            MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
-                        else
-                            MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = true;
-                    }
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
+                    FlipX = true;
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -167,16 +159,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (ObjectGrabed != null)
-                    {
-                        Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
-                        OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, 0, ref DampVelocity1, DecelerateSpeed), OtherRig.velocity.y);
-                        MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
-                    }
-                    else
-                    {
-                        MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, 0, ref DampVelocity1, DecelerateSpeed), MovingDirection.y);
-                    }
+                    MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, 0, ref DampVelocity1, DecelerateSpeed), MovingDirection.y);
 
                     if (ActualOnGround && !IsJumped)
                     {
@@ -190,14 +173,16 @@ public class PlayerController : MonoBehaviour
                 }
                 #endregion
 
+
                 #region Jumping
                 if (Input.GetButtonDown("Jump") && OnGround)
                 {
-                    IsJumped = true;
-                    LeaveGround = false;
-                    Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
+                    Anim.Jump();
                 }
                 #endregion
+
+                Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide);
+
                 break;
             case PlayerState.Climbing:
                 MovingDirection = Vector2.zero;
@@ -206,10 +191,11 @@ public class PlayerController : MonoBehaviour
                 Anim.Climb();
                 break;
             case PlayerState.Grabbing:
+                
                 #region Grabbing
-                if (Input.GetButton("Grab"))
+                if (Input.GetButton("Grab") && ActualOnGround)
                 {
-                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size, 0f, InteractableLayer);
                     ObjectGrabed = coll != null ? coll.gameObject : null;
                     if (ObjectGrabed == null)
                         GoState(PlayerState.Free);
@@ -227,7 +213,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (50 - OtherRig.mass <= 1 ? 1 : 50 - OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (SR.flipX)
+                        if (FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -235,7 +221,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * 50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = false;
+                        FlipX = false;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -254,7 +240,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Rigidbody2D OtherRig = ObjectGrabed.GetComponent<Rigidbody2D>();
                         OtherRig.velocity = new Vector2(Mathf.SmoothDamp(OtherRig.velocity.x, MovingSpeed * (-50 + OtherRig.mass >= -1 ? -1 : -50 + OtherRig.mass) * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), OtherRig.velocity.y);
-                        if (!SR.flipX)
+                        if (!FlipX)
                             MovingDirection = new Vector2(OtherRig.velocity.x * 0.5f, MovingDirection.y);
                         else
                             MovingDirection = new Vector2(OtherRig.velocity.x, MovingDirection.y);
@@ -262,7 +248,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         MovingDirection = new Vector2(Mathf.SmoothDamp(MovingDirection.x, MovingSpeed * -50 * Time.fixedDeltaTime, ref DampVelocity1, AccelerateSpeed), MovingDirection.y);
-                        SR.flipX = true;
+                        FlipX = true;
                     }
 
                     if (ActualOnGround && !IsJumped)
@@ -299,16 +285,14 @@ public class PlayerController : MonoBehaviour
                     }
                 }
                 #endregion
-                break;
-            case PlayerState.StartJump:
-                break;
-            case PlayerState.Jump:
-                break;
-            case PlayerState.Landing:
+
+                Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide, true);
                 break;
             default:
                 break;
         }
+
+        //LastOnGround = ActualOnGround;
     }
 
     void StateCheck()
@@ -336,13 +320,13 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         #region CanClimbCheck
-        RaycastHit2D BodyHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0 ,0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
-        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, SR.flipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
-        if(BodyHit.collider != null && HeadHit.collider == null && !WaitForClimb && State == PlayerState.Free)
+        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
+        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, FlipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
+        if (BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
         {
             WaitForClimb = true;
         }
-        else if(HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
+        else if (BodyHit != null && HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
         {
             CanClimb = true;
             WaitForClimb = false;
@@ -353,11 +337,13 @@ public class PlayerController : MonoBehaviour
             WaitForClimb = false;
         }
         #endregion
+
+        MovingSpeed = Hide ? HidingMovingSpeed : HighMovingSpeed;
     }
 
     private void FixedUpdate()
     {
-        if(!ActualOnGround)
+        if (!ActualOnGround)
         {
             if (Rig.velocity.y < 0)
             {
@@ -367,14 +353,13 @@ public class PlayerController : MonoBehaviour
             {
                 Rig.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
             }
-        }
+        } 
     }
 
     Vector2 ClampSlop(Vector2 velocity)
     {
         float moveDistance = velocity.x;
-        velocity.y = Mathf.Sin(OnGroundRadius) * moveDistance;
-        velocity.x = Mathf.Cos(OnGroundRadius) * moveDistance;
+        velocity = new Vector2(Mathf.Cos(OnGroundRadius) * moveDistance, Mathf.Sin(OnGroundRadius) * moveDistance);
         return velocity;
     }
 
@@ -390,34 +375,54 @@ public class PlayerController : MonoBehaviour
             Physics2D.Raycast(transform.position - new Vector3(0, Box.size.y / 2,  0) + (Vector3)Box.offset, Vector2.right, DetectingRayLength, GroundLayer),
         };
 
+        RaycastHit2D[] InnerHits = new RaycastHit2D[] {
+            Physics2D.Raycast(LeftPos, Vector2.right + Vector2.up, DetectingRayLength * 2, GroundLayer),
+            Physics2D.Raycast(RightPos, Vector2.left + Vector2.up, DetectingRayLength* 2, GroundLayer),
+        };
+
         bool Detected = false;
         bool CollideSomething = false;
-        for (int i = 0; i < hits.Length; i++)
-        {
-            if(hits[i].collider != null)
-            {
-                CollideSomething = true;
-                if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
-                {
-                    OnGroundRadius = hits[i].normal.SignedAngle() * Mathf.Deg2Rad;
-                    Detected = true;
-                    break;
-                }
-            }
 
-            if(i == hits.Length - 1 && !CollideSomething)
+        bool InnerDetected = false;
+
+        for (int i = 0; i < InnerHits.Length; i++)
+        {
+            if (InnerHits[i].collider != null)
             {
-                Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
-                Detected = coll != null ? true : false;
+                InnerDetected = true;
+                break;
             }
         }
 
+        if (!InnerDetected)
+        {
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].collider != null)
+                {
+                    CollideSomething = true;
+                    if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
+                    {
+                        OnGroundRadius = hits[i].normal.SignedAngle() * Mathf.Deg2Rad;
+                        Detected = true;
+                        break;
+                    }
+                }
+
+                if (i == hits.Length - 1 && !CollideSomething)
+                {
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2 + 0.01f) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
+                    Detected = coll != null ? true : false;
+                }
+            }
+        }
+        
         return Detected;
     }
 
     void GoState(PlayerState next)
     {
-        if(State == PlayerState.Climbing)
+        if (State == PlayerState.Climbing)
         {
             StartCoroutine(WaitForClimbingFinish(next));
         }
@@ -429,10 +434,19 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator WaitForClimbingFinish(PlayerState next)
     {
-        yield return new WaitForEndOfFrame();
-        transform.position += new Vector3(AfterClimbingOffset.x * (SR.flipX ? -1 : 1), AfterClimbingOffset.y);
+        transform.position += new Vector3(AfterClimbingOffset.x * (FlipX ? -1 : 1), AfterClimbingOffset.y);
         Rig.isKinematic = false;
+        ActualOnGround = true;
+        OnGround = true;
         State = next;
+        yield return new WaitForEndOfFrame();
+    }
+
+    public void Anim_Jump()
+    {
+        IsJumped = true;
+        LeaveGround = false;
+        Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
     }
 
 #if UNITY_EDITOR
@@ -451,18 +465,39 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawLine(transform.position - new Vector3(0, Box.size.y / 2, 0) + (Vector3)Box.offset, transform.position - new Vector3(0, Box.size.y / 2, 0) + (Vector3)Box.offset - new Vector3(0, DetectingRayLength));
 
             Gizmos.DrawWireCube((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size);
-        }
-
-        if(SR != null)
-        {
-            Gizmos.DrawWireCube((Vector2)transform.position + new Vector2(Box.size.x / 2 * (SR.flipX ? -1 : 1) + GrabOffset.x * (SR.flipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size);
             
-            if(Box != null)
-            {
-                Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), 0, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
-                Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (SR.flipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (SR.flipX ? -1 : 1), 0));
-            }
+            Gizmos.DrawWireCube((Vector2)transform.position + new Vector2(Box.size.x / 2 * (FlipX ? -1 : 1) + GrabOffset.x * (FlipX ? -1 : 1), GrabOffset.y) + Box.offset, GrabSize * Box.size);
+
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireCube(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y));
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (FlipX ? -1 : 1), 0));
+
+            Gizmos.DrawLine(LeftPos, LeftPos + (Vector2.right + Vector2.up) * DetectingRayLength * 2);
+            Gizmos.DrawLine(RightPos, RightPos + (Vector2.left + Vector2.up) * DetectingRayLength * 2);
         }
     }
 #endif
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        OnTriggerStay2D(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hideable"))
+        {
+            Hide = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hideable"))
+        {
+            Hide = false;
+        }
+    }
 }

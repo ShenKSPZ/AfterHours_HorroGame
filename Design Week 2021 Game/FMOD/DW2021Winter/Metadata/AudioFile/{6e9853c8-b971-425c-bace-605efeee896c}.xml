@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{6e9853c8-b971-425c-bace-605efeee896c}">
+		<property name="assetPath">
+			<value>Janitor/Walk_hard_Right.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.36571428571428571</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b3b2cbd2-95b8-492f-bb0e-2562feeeaa4a}</destination>
+		</relationship>
+	</object>
+</objects>

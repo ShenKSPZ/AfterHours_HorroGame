@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Hideable
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - Ground
   - Interactable
   - Player
-  - 
-  - 
+  - Hideable
+  - InteractableCore
   - 
   - 
   - 
@@ -39,6 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 4059982107
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: MidGround
+    uniqueID: 2297193395
+    locked: 0
+  - name: ForGround
+    uniqueID: 2393047705
     locked: 0
