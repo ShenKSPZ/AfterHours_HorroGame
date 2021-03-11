@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="DataFile" id="{ae85b8dd-9952-4aa7-8f21-ae891e48fa5a}">
+		<property name="assetPath">
+			<value>Design Week/Player FX/readme.txt</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{ba8271f8-192e-4030-a24b-dae6b82e0961}</destination>
+		</relationship>
+	</object>
+</objects>

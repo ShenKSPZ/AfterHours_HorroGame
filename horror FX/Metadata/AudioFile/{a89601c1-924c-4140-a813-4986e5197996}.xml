@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{a89601c1-924c-4140-a813-4986e5197996}">
+		<property name="assetPath">
+			<value>Design Week/Janitor FX/janitorGreen.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>15.432</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{ba8271f8-192e-4030-a24b-dae6b82e0961}</destination>
+		</relationship>
+	</object>
+</objects>

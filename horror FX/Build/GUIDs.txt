@@ -1,0 +1,5 @@
+{0f508482-ea6f-4aed-ad5f-ef94964c68d0} bank:/Master
+{974da456-9b14-06af-2b16-656a67bf6e48} bank:/Master.strings
+{ddbac6da-a390-4723-ac6e-b88ec8ff726d} bus:/
+{723c79b4-7e27-4189-b10f-922e0132ea03} bus:/Reverb
+{10c0407f-4602-4344-b390-00c43aff5211} event:/HorrorFX/Janitor_In_Room

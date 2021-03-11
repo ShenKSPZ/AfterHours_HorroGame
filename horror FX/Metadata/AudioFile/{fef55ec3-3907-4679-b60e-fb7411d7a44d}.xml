@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{fef55ec3-3907-4679-b60e-fb7411d7a44d}">
+		<property name="assetPath">
+			<value>Design Week/Level Music/Grade 1 Class/horrorAtmosphere.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>48.024000000000001</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{ba8271f8-192e-4030-a24b-dae6b82e0961}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{21c42076-469e-46b3-bd9a-f4e6c594949a}">
+		<property name="assetPath">
+			<value>Design Week/Level Music/Grade 1 Class/Grade1ClassBG.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>9.3599999999999994</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{ba8271f8-192e-4030-a24b-dae6b82e0961}</destination>
+		</relationship>
+	</object>
+</objects>
