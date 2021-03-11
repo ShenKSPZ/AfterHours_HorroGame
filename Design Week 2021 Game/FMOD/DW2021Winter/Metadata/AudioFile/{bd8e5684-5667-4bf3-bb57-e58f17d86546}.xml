@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{bd8e5684-5667-4bf3-bb57-e58f17d86546}">
+		<property name="assetPath">
+			<value>Janitor/Run_hard_Right.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.28734693877551021</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b3b2cbd2-95b8-492f-bb0e-2562feeeaa4a}</destination>
+		</relationship>
+	</object>
+</objects>

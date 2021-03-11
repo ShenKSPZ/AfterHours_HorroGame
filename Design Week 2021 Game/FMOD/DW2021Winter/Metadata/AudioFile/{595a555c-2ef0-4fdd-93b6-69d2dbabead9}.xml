@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{595a555c-2ef0-4fdd-93b6-69d2dbabead9}">
+		<property name="assetPath">
+			<value>Player FX/SurfaceFriction.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>87.771428571428572</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b3b2cbd2-95b8-492f-bb0e-2562feeeaa4a}</destination>
+		</relationship>
+	</object>
+</objects>
