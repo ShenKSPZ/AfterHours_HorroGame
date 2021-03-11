@@ -361,8 +361,8 @@ public class PlayerController : MonoBehaviour
 
     bool IsOnGround()
     {
-        Vector2 LeftPos = new Vector2(transform.position.x - (Box.size.x / 2), transform.position.y - (Box.size.y / 2)) + Box.offset;
-        Vector2 RightPos = new Vector2(transform.position.x + (Box.size.x / 2), transform.position.y - (Box.size.y / 2)) + Box.offset;
+        Vector2 LeftPos = new Vector2(transform.position.x - (Box.size.x / 2), transform.position.y - (Box.size.y / 2) - 0.01f) + Box.offset;
+        Vector2 RightPos = new Vector2(transform.position.x + (Box.size.x / 2), transform.position.y - (Box.size.y / 2) - 0.01f) + Box.offset;
         RaycastHit2D[] hits = new RaycastHit2D[] {
             Physics2D.Raycast(LeftPos, Vector2.down, DetectingRayLength, GroundLayer),
             Physics2D.Raycast(LeftPos, Vector2.left, DetectingRayLength, GroundLayer),

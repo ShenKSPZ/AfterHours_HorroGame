@@ -42,6 +42,6 @@ public class AnimatorManager : MonoBehaviour
     {
         anim.SetBool("Grabing", Grabing);
         anim.SetFloat("MovingSpeed", MovingSpeed);
-        anim.SetFloat("IsHide", Mathf.SmoothDamp(anim.GetFloat("IsHide"), IsHide? 1 : 0, ref HidingSpeed, 0.2f));
+        anim.SetFloat("IsHide", Mathf.SmoothDamp(anim.GetFloat("IsHide"), IsHide? 1 : 0, ref HidingSpeed, 0.1f));
     }
 }
