@@ -98,6 +98,9 @@
 		<property name="pitch">
 			<value>3.4000001</value>
 		</property>
+		<relationship name="modulators">
+			<destination>{a459860e-6629-4807-a940-93def46a46c2}</destination>
+		</relationship>
 		<relationship name="fadeOutCurve">
 			<destination>{21cbdedc-7430-4c71-a27b-1bb4d2cf52c2}</destination>
 		</relationship>
@@ -126,6 +129,20 @@
 	</object>
 	<object class="MixerBusPanner" id="{ec8d6d03-02a9-42e2-a86f-9c7d05608146}" />
 	<object class="MixerBusFader" id="{9294d133-b4ca-403d-b862-ce5c9d64b29c}" />
+	<object class="ADSRModulator" id="{a459860e-6629-4807-a940-93def46a46c2}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>pitch</value>
+		</property>
+		<property name="decayTime">
+			<value>3423.07764</value>
+		</property>
+		<property name="sustainValue">
+			<value>-2.222229</value>
+		</property>
+		<property name="finalValue">
+			<value>-20</value>
+		</property>
+	</object>
 	<object class="FadeCurve" id="{21cbdedc-7430-4c71-a27b-1bb4d2cf52c2}">
 		<relationship name="startPoint">
 			<destination>{c3b97858-3989-4b94-9f61-e2f01a645d9c}</destination>
@@ -149,7 +166,7 @@
 			<value>1</value>
 		</property>
 		<property name="curveShape">
-			<value>0.25471893</value>
+			<value>-0.271312386</value>
 		</property>
 	</object>
 	<object class="AutomationPoint" id="{f8542eba-6829-44b5-9290-3204e31b37e3}">

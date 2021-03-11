@@ -90,13 +90,10 @@
 	<object class="MixerBusPanner" id="{f62ec043-5e81-4746-981d-3a70bc6118ad}" />
 	<object class="SingleSound" id="{b8055bce-eedc-4841-9ddf-b393c45a7a66}">
 		<property name="length">
-			<value>6.8000000000000007</value>
-		</property>
-		<property name="volume">
-			<value>-10.5</value>
+			<value>4.1000000000000005</value>
 		</property>
 		<property name="pitch">
-			<value>-2</value>
+			<value>-4.5</value>
 		</property>
 		<relationship name="fadeOutCurve">
 			<destination>{4755056e-d6a3-43fc-bce7-3dbe61b4779b}</destination>
@@ -144,22 +141,25 @@
 	<object class="MixerBusPanner" id="{ad99b6bc-f94c-4a77-9568-775d01dd739c}" />
 	<object class="SFXReverbEffect" id="{d8610bb5-85b9-4ecc-a472-3339d02f3277}">
 		<property name="earlyDelay">
-			<value>7</value>
+			<value>162</value>
 		</property>
 		<property name="lateDelay">
-			<value>11</value>
+			<value>88</value>
 		</property>
 		<property name="HFDecayRatio">
-			<value>59</value>
+			<value>54</value>
+		</property>
+		<property name="diffusion">
+			<value>79</value>
 		</property>
 		<property name="highCut">
-			<value>7800</value>
+			<value>760</value>
 		</property>
 		<property name="earlyLateMix">
-			<value>87</value>
+			<value>94</value>
 		</property>
 		<property name="wetLevel">
-			<value>-5.5</value>
+			<value>-12.3000002</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{b7c9ab74-fb7e-47b2-b890-839d03a0e76b}" />
@@ -172,12 +172,12 @@
 			<value>1</value>
 		</property>
 		<property name="curveShape">
-			<value>0.051254265</value>
+			<value>-0.904820383</value>
 		</property>
 	</object>
 	<object class="AutomationPoint" id="{0f06d635-6ecc-4a66-a35e-bc4cd2112556}">
 		<property name="position">
-			<value>6.8000000000000007</value>
+			<value>4.1000000000000005</value>
 		</property>
 		<property name="value">
 			<value>0</value>
