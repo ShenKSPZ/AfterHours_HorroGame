@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 318098125}
   m_Layer: 11
   m_Name: HideableSquare6
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -649,7 +649,7 @@ GameObject:
   - component: {fileID: 339855415}
   m_Layer: 11
   m_Name: HideableSquare3
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1129,7 +1129,7 @@ GameObject:
   - component: {fileID: 433515638}
   m_Layer: 11
   m_Name: HideableSquare1
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1250,7 +1250,7 @@ GameObject:
   - component: {fileID: 660382878}
   m_Layer: 11
   m_Name: HideableSquare4
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1848,7 +1848,7 @@ GameObject:
   - component: {fileID: 1188274144}
   m_Layer: 11
   m_Name: HideableSquare2
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1969,7 +1969,7 @@ GameObject:
   - component: {fileID: 1190854139}
   m_Layer: 11
   m_Name: HideableSquare7
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2847,7 +2847,7 @@ GameObject:
   - component: {fileID: 1672216998}
   m_Layer: 11
   m_Name: HideableSquare3
-  m_TagString: HIdeable
+  m_TagString: Hideable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
