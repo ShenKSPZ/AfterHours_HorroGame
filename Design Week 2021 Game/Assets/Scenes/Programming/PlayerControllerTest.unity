@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -439,6 +439,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   DampSpeed: 0.12
+  RegionOffset: {x: 0, y: 0}
+  RegionSize: {x: 0, y: 0}
 --- !u!114 &358615190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2184,6 +2186,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1097077775223352000, guid: e93122a056e2d714184abead7d52a77e,
+        type: 3}
+      propertyPath: RegionSize.x
+      value: 63.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097077775223352000, guid: e93122a056e2d714184abead7d52a77e,
+        type: 3}
+      propertyPath: RegionSize.y
+      value: 58
+      objectReference: {fileID: 0}
     - target: {fileID: 1097077776550702028, guid: e93122a056e2d714184abead7d52a77e,
         type: 3}
       propertyPath: m_Name
