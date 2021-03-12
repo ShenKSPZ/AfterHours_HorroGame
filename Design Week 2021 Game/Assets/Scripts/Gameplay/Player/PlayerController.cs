@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using FunctionExtend;
 using UnityEngine.UI;
+using FMODUnity;
+using Framework;
+
 
 public enum PlayerState
 {
@@ -19,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public float DetectingRayLength = 1f;
     [Header("Movement")]
     public float MovingSpeed = 9;
+    public float HidingMovingSpeed = 3;
     public float AccelerateSpeed = 0.09f;
     public float DecelerateSpeed = 0.05f;
 
@@ -53,17 +57,18 @@ public class PlayerController : MonoBehaviour
 
     #region Runtime
     bool FlipX = false;
-    //bool LastOnGround = false;
+    FMOD.Studio.EventInstance GrabingInstances;
 
     //Velocity
     Vector2 MovingDirection = Vector2.zero;
     float DampVelocity1 = 0;
+    float HighMovingSpeed = 0;
 
     //About Ground
-    bool OnGround = false;
-    bool ActualOnGround = false;
+    public bool OnGround = false;
+    public bool ActualOnGround = false;
     float LeftGrounded = 0f;
-    float OnGroundRadius = 0;
+    public float OnGroundRadius = 0;
 
     //Jumping
     bool IsJumped = false;
@@ -87,10 +92,18 @@ public class PlayerController : MonoBehaviour
         Rig = GetComponent<Rigidbody2D>();
         Box = GetComponent<BoxCollider2D>();
         Anim = GetComponent<AnimatorManager>();
+        HighMovingSpeed = MovingSpeed;
+    }
+
+    private void Start()
+    {
+        GrabingInstances = RuntimeManager.CreateInstance("event:/Teddy/Grab_Loop");
     }
 
     private void Update()
     {
+        EventCenter.I().Triggered("GetCaught");
+
         StateCheck();
         if (FlipX)
             transform.eulerAngles = Vector3.zero;
@@ -170,13 +183,16 @@ public class PlayerController : MonoBehaviour
                 }
                 #endregion
 
-
                 #region Jumping
                 if (Input.GetButtonDown("Jump") && OnGround)
                 {
                     Anim.Jump();
                 }
                 #endregion
+
+                GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstateMoving);
+                if (playbackstateMoving != FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstateMoving != FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                    GrabingInstances.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide);
 
@@ -283,6 +299,19 @@ public class PlayerController : MonoBehaviour
                 }
                 #endregion
 
+                if (Rig.velocity.magnitude / MovingSpeed > 0.1)
+                {
+                    GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstate);
+                    if (playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                        GrabingInstances.start();
+                }
+                else
+                {
+                    GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstate);
+                    if (playbackstate != FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstate != FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                        GrabingInstances.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                }
+
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide, true);
                 break;
             default:
@@ -315,21 +344,6 @@ public class PlayerController : MonoBehaviour
             Rig.gravityScale = 1;
         }
         #endregion
-    }
-
-    private void FixedUpdate()
-    {
-        if (!ActualOnGround)
-        {
-            if (Rig.velocity.y < 0)
-            {
-                Rig.velocity += Vector2.up * Physics2D.gravity.y * (FallMultiplier - 1) * Time.fixedDeltaTime;
-            }
-            else if (Rig.velocity.y > 0 && Input.GetAxis("Jump") != 1)
-            {
-                Rig.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
-            }
-        }
 
         #region CanClimbCheck
         Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
@@ -349,20 +363,36 @@ public class PlayerController : MonoBehaviour
             WaitForClimb = false;
         }
         #endregion
+
+        MovingSpeed = Hide ? HidingMovingSpeed : HighMovingSpeed;
+    }
+
+    private void FixedUpdate()
+    {
+        if (!ActualOnGround)
+        {
+            if (Rig.velocity.y < 0)
+            {
+                Rig.velocity += Vector2.up * Physics2D.gravity.y * (FallMultiplier - 1) * Time.fixedDeltaTime;
+            }
+            else if (Rig.velocity.y > 0 && Input.GetAxis("Jump") != 1)
+            {
+                Rig.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
+            }
+        } 
     }
 
     Vector2 ClampSlop(Vector2 velocity)
     {
         float moveDistance = velocity.x;
-        velocity.y = Mathf.Sin(OnGroundRadius) * moveDistance;
-        velocity.x = Mathf.Cos(OnGroundRadius) * moveDistance;
+        velocity = new Vector2(Mathf.Cos(OnGroundRadius) * moveDistance, Mathf.Sin(OnGroundRadius) * moveDistance);
         return velocity;
     }
 
     bool IsOnGround()
     {
-        Vector2 LeftPos = new Vector2(transform.position.x - (Box.size.x / 2), transform.position.y - (Box.size.y / 2) - 0.01f) + Box.offset;
-        Vector2 RightPos = new Vector2(transform.position.x + (Box.size.x / 2), transform.position.y - (Box.size.y / 2) - 0.01f) + Box.offset;
+        Vector2 LeftPos = new Vector2(transform.position.x - (Box.size.x / 2), transform.position.y - (Box.size.y / 2)) + Box.offset;
+        Vector2 RightPos = new Vector2(transform.position.x + (Box.size.x / 2), transform.position.y - (Box.size.y / 2)) + Box.offset;
         RaycastHit2D[] hits = new RaycastHit2D[] {
             Physics2D.Raycast(LeftPos, Vector2.down, DetectingRayLength, GroundLayer),
             Physics2D.Raycast(LeftPos, Vector2.left, DetectingRayLength, GroundLayer),
@@ -372,40 +402,47 @@ public class PlayerController : MonoBehaviour
         };
 
         RaycastHit2D[] InnerHits = new RaycastHit2D[] {
-            Physics2D.Raycast(LeftPos, Vector2.right, DetectingRayLength, GroundLayer),
-            Physics2D.Raycast(RightPos, Vector2.left, DetectingRayLength, GroundLayer),
+            Physics2D.Raycast(LeftPos, Vector2.right + Vector2.up, DetectingRayLength * 2, GroundLayer),
+            Physics2D.Raycast(RightPos, Vector2.left + Vector2.up, DetectingRayLength* 2, GroundLayer),
         };
 
         bool Detected = false;
         bool CollideSomething = false;
-        for (int i = 0; i < hits.Length; i++)
-        {
-            if (hits[i].collider != null)
-            {
-                CollideSomething = true;
-                if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
-                {
-                    OnGroundRadius = hits[i].normal.SignedAngle() * Mathf.Deg2Rad;
-                    Detected = true;
-                    break;
-                }
-            }
 
-            if (i == hits.Length - 1 && !CollideSomething)
-            {
-                Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
-                Detected = coll != null ? true : false;
-            }
-        }
+        bool InnerDetected = false;
 
         for (int i = 0; i < InnerHits.Length; i++)
         {
             if (InnerHits[i].collider != null)
             {
-                Detected = false;
+                InnerDetected = true;
                 break;
             }
         }
+
+        if (!InnerDetected)
+        {
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].collider != null)
+                {
+                    CollideSomething = true;
+                    if (Mathf.Abs(hits[i].normal.SignedAngle()) <= 50)
+                    {
+                        OnGroundRadius = hits[i].normal.SignedAngle() * Mathf.Deg2Rad;
+                        Detected = true;
+                        break;
+                    }
+                }
+
+                if (i == hits.Length - 1 && !CollideSomething)
+                {
+                    Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position - new Vector2(0, Box.size.y / 2 + 0.01f) + GroundOffset + Box.offset, GroundSize * Box.size, 0, GroundLayer);
+                    Detected = coll != null ? true : false;
+                }
+            }
+        }
+        
         return Detected;
     }
 
@@ -433,9 +470,20 @@ public class PlayerController : MonoBehaviour
 
     public void Anim_Jump()
     {
+        RuntimeManager.PlayOneShot("event:/Teddy/Jump");
         IsJumped = true;
         LeaveGround = false;
         Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
+    }
+
+    public void Anim_Walk()
+    {
+        RuntimeManager.PlayOneShot("event:/Teddy/Walk");
+    }
+
+    public void Anim_Land()
+    {
+        RuntimeManager.PlayOneShot("event:/Teddy/Land");
     }
 
 #if UNITY_EDITOR
@@ -462,6 +510,9 @@ public class PlayerController : MonoBehaviour
 
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, (Vector3)Box.offset + transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + new Vector3(DetectingRayLength * (FlipX ? -1 : 1), 0));
+
+            Gizmos.DrawLine(LeftPos, LeftPos + (Vector2.right + Vector2.up) * DetectingRayLength * 2);
+            Gizmos.DrawLine(RightPos, RightPos + (Vector2.left + Vector2.up) * DetectingRayLength * 2);
         }
     }
 #endif
