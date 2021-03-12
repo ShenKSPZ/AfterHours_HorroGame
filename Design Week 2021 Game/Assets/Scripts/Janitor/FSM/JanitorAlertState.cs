@@ -45,4 +45,9 @@ public class JanitorAlertState : JanitorBaseState
     {
         HeartBeatInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
+
+    private void OnDestroy()
+    {
+        HeartBeatInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
 }
