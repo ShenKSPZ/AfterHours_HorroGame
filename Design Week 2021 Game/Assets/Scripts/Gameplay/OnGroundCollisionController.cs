@@ -8,7 +8,7 @@ public class OnGroundCollisionController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject go = collision.gameObject;
-        if (go.tag == "Player")
+        if (go.CompareTag("Ground"))
         {
             FMODUnity.RuntimeManager.PlayOneShot("event:/HitGround", transform.position);
             controller.alertRaiseEvent.Invoke();
