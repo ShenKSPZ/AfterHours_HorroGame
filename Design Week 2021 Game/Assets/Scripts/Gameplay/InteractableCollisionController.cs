@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class InteractableCollisionController : MonoBehaviour
 {
+    public JanitorController controller;
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
         GameObject go = collision.gameObject;
-        if (gameObject.name == "Broom" && go.tag == "Player")
+        if (go.tag == "Player")
         {
-            GameplayController.I().alertRaiseEvent.Invoke();
+            controller.alertRaiseEvent.Invoke();
         }
     }
 }

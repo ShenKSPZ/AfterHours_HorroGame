@@ -9,20 +9,19 @@ public class JanitorAlertState : JanitorBaseState
     public override void Init(GameObject _owner, FSM _fsm)
     {
         base.Init(_owner, _fsm);
-
-        // some animation action listener can be added here
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        controller.state = JanitorController.States.Alert;
         currentWait = 0.0f;
-        RuntimeManager.PlayOneShot("event:/Janitor/Alert");
+        RuntimeManager.PlayOneShot("event:/Janitor/Alert", controller.gameObject.transform.position);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         currentWait += Time.deltaTime;
-        if ((currentWait > controller.alertDelayTime) && GameplayController.I().gameState == GameplayController.States.Normal)
+        if ((currentWait > controller.alertDelayTime) && !controller.player.GetComponent<PlayerController>().Hide)
         {
             fsm.ChangeState(fsm.ChaseState);
         }

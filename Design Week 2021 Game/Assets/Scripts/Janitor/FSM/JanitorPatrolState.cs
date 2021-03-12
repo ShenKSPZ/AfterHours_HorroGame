@@ -11,8 +11,8 @@ public class JanitorPatrolState : JanitorBaseState
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
-        GameplayController.I().alertRaiseEvent.AddListener(OnAlertRaised);
+        controller.state = JanitorController.States.Patrol;
+        controller.alertRaiseEvent.AddListener(OnAlertRaised);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -21,17 +21,19 @@ public class JanitorPatrolState : JanitorBaseState
         if (controller.transform.position.x < controller.patrolMinPositionX )
         {
             controller.direction = 1;
+            controller.FlipCharacter();
         }
         if (controller.transform.position.x > controller.patrolMaxPositionX)
         {
             controller.direction = -1;
+            controller.FlipCharacter();
         }
 
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GameplayController.I().alertRaiseEvent.RemoveListener(OnAlertRaised);
+        controller.alertRaiseEvent.RemoveListener(OnAlertRaised);
     }
 
     private void OnAlertRaised()
