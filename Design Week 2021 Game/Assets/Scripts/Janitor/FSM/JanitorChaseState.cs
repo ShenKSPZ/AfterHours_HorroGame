@@ -12,6 +12,7 @@ public class JanitorChaseState : JanitorBaseState
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        controller.state = JanitorController.States.Chase;
         controller.legAnimator.SetBool("Chase", true);
     }
 
@@ -19,11 +20,13 @@ public class JanitorChaseState : JanitorBaseState
     {
         int direction = (controller.player.transform.position.x - controller.transform.position.x) > 0 ? 1 : -1;
         // within the catch range
-        if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < controller.catchDistance)
+        if ( Mathf.Abs(controller.player.transform.position.x - controller.transform.position.x) < controller.catchDistance)
         {
             if (!controller.player.GetComponent<PlayerController>().Hide)
             {
-                EventCenter.I().Triggered("GetCaught");
+                // trigger caught
+                Debug.Log("Caught");
+
             }
             else
             {

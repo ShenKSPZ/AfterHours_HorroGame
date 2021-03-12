@@ -16,6 +16,7 @@ public class JanitorIdleState : JanitorBaseState
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        controller.state = JanitorController.States.Idle;
         currentWait = 0.0f;
     }
 
