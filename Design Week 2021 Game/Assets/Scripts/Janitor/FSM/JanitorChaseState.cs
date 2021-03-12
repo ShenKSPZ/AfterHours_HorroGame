@@ -59,5 +59,6 @@ public class JanitorChaseState : JanitorBaseState
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        HeartBeatFastInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 }
