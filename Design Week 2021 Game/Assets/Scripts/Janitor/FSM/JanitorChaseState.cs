@@ -30,7 +30,8 @@ public class JanitorChaseState : JanitorBaseState
             if (!controller.player.GetComponent<PlayerController>().Hide)
             {
                 // trigger caught
-                Debug.Log("Caught");
+                //Debug.Log("Caught");
+                EventCenter.I().Triggered("GetCaught");
 
             }
             else

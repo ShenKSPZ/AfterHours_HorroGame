@@ -17,6 +17,7 @@ public class PostEffect : MonoBehaviour
     public float BlackScreenSpeed = 0.1f;
 
     Volume volume;
+    bool AlGetCaught = false;
 
     private void Awake()
     {
@@ -31,10 +32,14 @@ public class PostEffect : MonoBehaviour
 
     public void GetCaught()
     {
-        EventCenter.I().Triggered("Lock");
-        Hands.gameObject.SetActive(true);
-        FMODUnity.RuntimeManager.PlayOneShot("event:/Janitor/GetCaught");
-        StartCoroutine(CameraShaking());
+        if (!AlGetCaught)
+        {
+            AlGetCaught = true;
+            EventCenter.I().Triggered("Lock");
+            Hands.gameObject.SetActive(true);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Janitor/GetCaught");
+            StartCoroutine(CameraShaking());
+        }
     }
 
     IEnumerator CameraShaking()
