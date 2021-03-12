@@ -62,4 +62,8 @@ public class JanitorChaseState : JanitorBaseState
     {
         HeartBeatFastInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
+    private void OnDestroy()
+    {
+        HeartBeatFastInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
 }
