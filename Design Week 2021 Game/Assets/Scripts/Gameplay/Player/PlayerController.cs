@@ -323,6 +323,9 @@ public class PlayerController : MonoBehaviour
 
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide, true);
                 break;
+            case PlayerState.Lock:
+                Anim.Locomotion(0, true, false);
+                break;
             default:
                 break;
         }
@@ -354,25 +357,6 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
-        #region CanClimbCheck
-        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
-        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, FlipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
-        if (BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
-        {
-            WaitForClimb = true;
-        }
-        else if (BodyHit != null && HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
-        {
-            CanClimb = true;
-            WaitForClimb = false;
-        }
-        else
-        {
-            CanClimb = false;
-            WaitForClimb = false;
-        }
-        #endregion
-
         MovingSpeed = Hide ? HidingMovingSpeed : HighMovingSpeed;
     }
 
@@ -388,7 +372,29 @@ public class PlayerController : MonoBehaviour
             {
                 Rig.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
             }
-        } 
+        }
+
+        #region CanClimbCheck
+        Collider2D BodyHit = Physics2D.OverlapBox(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1) + ClimbingBoxOffset.x * (FlipX ? -1 : 1), ClimbingBoxOffset.y) + (Vector3)Box.offset, new Vector2(DetectingRayLength, ClimbingBoxSize.y * Box.size.y), 0f, GroundLayer);
+        RaycastHit2D HeadHit = Physics2D.Raycast(transform.position + new Vector3(Box.size.x / 2 * (FlipX ? -1 : 1), Box.size.y / 2, 0) + (Vector3)Box.offset, FlipX ? Vector2.left : Vector2.right, DetectingRayLength, GroundLayer);
+        if (BodyHit != null && HeadHit.collider == null && State == PlayerState.Free)
+        {
+            WaitForClimb = true;
+        }
+        else if (BodyHit != null && HeadHit.collider != null && WaitForClimb && State == PlayerState.Free)
+        {
+            if (!Physics2D.OverlapBox(transform.position + new Vector3(AfterClimbingOffset.x * (FlipX ? -1 : 1), AfterClimbingOffset.y), new Vector2(0.1f, 0.1f), 0, GroundLayer))
+            {
+                CanClimb = true;
+                WaitForClimb = false;
+            }
+        }
+        else
+        {
+            CanClimb = false;
+            WaitForClimb = false;
+        }
+        #endregion
     }
 
     Vector2 ClampSlop(Vector2 velocity)
