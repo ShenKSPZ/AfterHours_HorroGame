@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.01.00">
 	<object class="AudioFile" id="{cc9e9340-221f-47e6-ace6-774eb95b4508}">
 		<property name="assetPath">
-			<value>BackgroundNoise.wav</value>
+			<value>Level Music/BackgroundNoise.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

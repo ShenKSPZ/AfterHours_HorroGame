@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FunctionExtend;
 using UnityEngine.UI;
-
+using FMODUnity;
 public enum PlayerState
 {
     Free,
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     #region Runtime
     bool FlipX = false;
-    //bool LastOnGround = false;
+    FMOD.Studio.EventInstance GrabingInstances;
 
     //Velocity
     Vector2 MovingDirection = Vector2.zero;
@@ -90,6 +90,11 @@ public class PlayerController : MonoBehaviour
         Box = GetComponent<BoxCollider2D>();
         Anim = GetComponent<AnimatorManager>();
         HighMovingSpeed = MovingSpeed;
+    }
+
+    private void Start()
+    {
+        GrabingInstances = RuntimeManager.CreateInstance("event:/Teddy/Grab_Loop");
     }
 
     private void Update()
@@ -173,13 +178,16 @@ public class PlayerController : MonoBehaviour
                 }
                 #endregion
 
-
                 #region Jumping
                 if (Input.GetButtonDown("Jump") && OnGround)
                 {
                     Anim.Jump();
                 }
                 #endregion
+
+                GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstateMoving);
+                if (playbackstateMoving != FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstateMoving != FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                    GrabingInstances.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide);
 
@@ -285,6 +293,19 @@ public class PlayerController : MonoBehaviour
                     }
                 }
                 #endregion
+
+                if (Rig.velocity.magnitude / MovingSpeed > 0.1)
+                {
+                    GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstate);
+                    if (playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                        GrabingInstances.start();
+                }
+                else
+                {
+                    GrabingInstances.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstate);
+                    if (playbackstate != FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstate != FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                        GrabingInstances.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                }
 
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide, true);
                 break;
@@ -444,9 +465,20 @@ public class PlayerController : MonoBehaviour
 
     public void Anim_Jump()
     {
+        RuntimeManager.PlayOneShot("event:/Teddy/Jump");
         IsJumped = true;
         LeaveGround = false;
         Rig.velocity = new Vector2(Rig.velocity.x, JumpingSpeed);
+    }
+
+    public void Anim_Walk()
+    {
+        RuntimeManager.PlayOneShot("event:/Teddy/Walk");
+    }
+
+    public void Anim_Land()
+    {
+        RuntimeManager.PlayOneShot("event:/Teddy/Land");
     }
 
 #if UNITY_EDITOR
