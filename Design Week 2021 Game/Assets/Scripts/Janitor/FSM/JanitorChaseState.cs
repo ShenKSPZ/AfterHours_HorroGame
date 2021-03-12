@@ -30,15 +30,15 @@ public class JanitorChaseState : JanitorBaseState
             if (!controller.player.GetComponent<PlayerController>().Hide)
             {
                 // trigger caught
-                //Debug.Log("Caught");
                 EventCenter.I().Triggered("GetCaught");
-
+                controller.legAnimator.SetBool("Stand", true);
             }
             else
             {
                 fsm.ChangeState(fsm.PatrolState);
                 controller.legAnimator.SetBool("Chase", false);
                 FMODUnity.RuntimeManager.PlayOneShot("event:/Janitor/GiveUp");
+                controller.legAnimator.SetBool("Stand", false);
             }
             
         }
