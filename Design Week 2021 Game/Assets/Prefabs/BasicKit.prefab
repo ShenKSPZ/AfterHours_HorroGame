@@ -586,6 +586,11 @@ PrefabInstance:
       propertyPath: m_Bounds.m_Extent.y
       value: 1.0346894
       objectReference: {fileID: 0}
+    - target: {fileID: 1726970148325042852, guid: 8b98d6728440b3a4998023c864023ccb,
+        type: 3}
+      propertyPath: ClimbingBoxSize.y
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 1865902599526884135, guid: 8b98d6728440b3a4998023c864023ccb,
         type: 3}
       propertyPath: m_Bounds.m_Center.x

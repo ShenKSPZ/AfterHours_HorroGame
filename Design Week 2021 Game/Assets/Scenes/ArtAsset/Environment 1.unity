@@ -1344,7 +1344,11 @@ MonoBehaviour:
   checkingTime: 3
   alertDelayTime: 2
   player: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  leg: {fileID: 0}
+  hand: {fileID: 0}
+  direction: 1
+  legAnimator: {fileID: 0}
+  handAnimator: {fileID: 0}
 --- !u!114 &399098909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3198,7 +3202,7 @@ PrefabInstance:
     - target: {fileID: 1097077776141132179, guid: e93122a056e2d714184abead7d52a77e,
         type: 3}
       propertyPath: Volume
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1097077776550702028, guid: e93122a056e2d714184abead7d52a77e,
         type: 3}
@@ -3338,6 +3342,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070178491576984120, guid: fde22b37f98a5fa4797dd8b4e335edb0,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.0076706
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070178491576984120, guid: fde22b37f98a5fa4797dd8b4e335edb0,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 0.0038352907
       objectReference: {fileID: 0}
     - target: {fileID: 7152792135742203232, guid: fde22b37f98a5fa4797dd8b4e335edb0,
         type: 3}
