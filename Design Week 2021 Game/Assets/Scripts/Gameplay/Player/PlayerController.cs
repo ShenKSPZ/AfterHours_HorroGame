@@ -12,6 +12,7 @@ public enum PlayerState
     Free,
     Climbing,
     Grabbing,
+    Lock,
 }
 
 public class PlayerController : MonoBehaviour
@@ -93,6 +94,13 @@ public class PlayerController : MonoBehaviour
         Box = GetComponent<BoxCollider2D>();
         Anim = GetComponent<AnimatorManager>();
         HighMovingSpeed = MovingSpeed;
+
+        EventCenter.I().AddListener("Lock", Lock);
+    }
+
+    void Lock()
+    {
+        State = PlayerState.Lock;
     }
 
     private void Start()
@@ -102,7 +110,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        EventCenter.I().Triggered("GetCaught");
+        //if(State != PlayerState.Lock)
+        //    EventCenter.I().Triggered("GetCaught");
 
         StateCheck();
         if (FlipX)
