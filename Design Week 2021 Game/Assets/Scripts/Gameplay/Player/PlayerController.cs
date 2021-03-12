@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        EventCenter.I().Triggered("GetCaught");
+        //EventCenter.I().Triggered("GetCaught");
 
         StateCheck();
         if (FlipX)
