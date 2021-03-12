@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class JanitorAlertState : JanitorBaseState
 {
@@ -15,7 +16,7 @@ public class JanitorAlertState : JanitorBaseState
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         currentWait = 0.0f;
-        controller.spriteRenderer.color = Color.yellow;
+        RuntimeManager.PlayOneShot("event:/Janitor/Alert");
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

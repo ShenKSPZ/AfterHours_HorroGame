@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +8,11 @@ public class JanitorChaseState : JanitorBaseState
     public override void Init(GameObject _owner, FSM _fsm)
     {
         base.Init(_owner, _fsm);
-
-        // some animation action listener can be added here
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        controller.spriteRenderer.color = Color.red;
+        controller.legAnimator.SetBool("Chase", true);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -22,7 +21,16 @@ public class JanitorChaseState : JanitorBaseState
         // within the catch range
         if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < controller.catchDistance)
         {
-            Debug.Log("I got you!");
+            if (!controller.player.GetComponent<PlayerController>().Hide)
+            {
+                EventCenter.I().Triggered("GetCaught");
+            }
+            else
+            {
+                fsm.ChangeState(fsm.PatrolState);
+                controller.legAnimator.SetBool("Chase", false);
+            }
+            
         }
         else
         {
