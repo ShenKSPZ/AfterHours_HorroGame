@@ -57,7 +57,7 @@ public class JanitorController : MonoBehaviour
     public void FlipCharacter()
     {
         Vector3 scale = gameObject.transform.localScale;
-        scale.x = direction;
+        scale.x *= -1;
         gameObject.transform.localScale = scale;
     }
 
