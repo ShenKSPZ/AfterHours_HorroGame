@@ -31,6 +31,7 @@ public class JanitorChaseState : JanitorBaseState
             {
                 // trigger caught
                 EventCenter.I().Triggered("GetCaught");
+                HeartBeatFastInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 controller.legAnimator.SetBool("Stand", true);
             }
             else
