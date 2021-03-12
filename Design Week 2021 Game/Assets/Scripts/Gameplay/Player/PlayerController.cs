@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 {
     #region Settings
     public PlayerState State = PlayerState.Free;
+    public PhysicsMaterial2D ZeroFricition;
+    public PhysicsMaterial2D Fricition;
 
     public float DetectingRayLength = 1f;
     [Header("Movement")]
@@ -324,6 +326,7 @@ public class PlayerController : MonoBehaviour
                 Anim.Locomotion(Rig.velocity.magnitude / MovingSpeed, Hide, true);
                 break;
             case PlayerState.Lock:
+                Rig.velocity = new Vector2(0, Rig.velocity.y);
                 Anim.Locomotion(0, true, false);
                 break;
             default:

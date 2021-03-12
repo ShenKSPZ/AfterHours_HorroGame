@@ -220,7 +220,14 @@
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{ba3fc06b-5c27-4966-8b8b-41fe59e78e1a}" />
-	<object class="SpatialiserEffect" id="{8fdebcbc-e8a2-4575-a889-186a029de924}" />
+	<object class="SpatialiserEffect" id="{8fdebcbc-e8a2-4575-a889-186a029de924}">
+		<property name="minimumDistance">
+			<value>8.10000038</value>
+		</property>
+		<property name="maximumDistance">
+			<value>400</value>
+		</property>
+	</object>
 	<object class="PitchShifterEffect" id="{52c2acbd-9f23-4092-9521-dc8fb26b7117}">
 		<property name="pitch">
 			<value>1.05999994</value>

@@ -768,12 +768,17 @@ PrefabInstance:
     - target: {fileID: 139764083706807402, guid: 0b15e25b0ca55554ba7fbdcbdcbe82db,
         type: 3}
       propertyPath: Audio.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 139764083706807402, guid: 0b15e25b0ca55554ba7fbdcbdcbe82db,
         type: 3}
       propertyPath: Audio.Array.data[0]
       value: event:/Level/Grade1ClassBG
+      objectReference: {fileID: 0}
+    - target: {fileID: 139764083706807402, guid: 0b15e25b0ca55554ba7fbdcbdcbe82db,
+        type: 3}
+      propertyPath: Audio.Array.data[1]
+      value: event:/BackgroundNoise_Loopable
       objectReference: {fileID: 0}
     - target: {fileID: 139764083706807402, guid: 0b15e25b0ca55554ba7fbdcbdcbe82db,
         type: 3}

@@ -396,7 +396,7 @@ MonoBehaviour:
   sourceProjectPath: FMOD/DW2021Winter/DW2021Winter.fspro
   sourceBankPath: FMOD\DW2021Winter\Build
   SourceBankPathUnformatted: 
-  AutomaticEventLoading: 1
+  AutomaticEventLoading: 0
   BankLoadType: 0
   AutomaticSampleLoading: 0
   EncryptionKey: 
@@ -418,7 +418,7 @@ MonoBehaviour:
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
-  EnableMemoryTracking: 0
+  EnableMemoryTracking: 1
   AndroidUseOBB: 0
   MeterChannelOrdering: 0
   StopEventsOutsideMaxDistance: 0
@@ -526,11 +526,11 @@ MonoBehaviour:
       Value: 0
       HasValue: 0
     VirtualChannelCount:
-      Value: 0
-      HasValue: 0
+      Value: 256
+      HasValue: 1
     RealChannelCount:
-      Value: 0
-      HasValue: 0
+      Value: 64
+      HasValue: 1
     DSPBufferLength:
       Value: 0
       HasValue: 0
