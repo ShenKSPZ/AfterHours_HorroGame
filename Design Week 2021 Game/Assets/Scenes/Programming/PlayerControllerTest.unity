@@ -199,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65854762}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.4, y: -1.78, z: 0}
+  m_LocalPosition: {x: 4.16, y: -1.16, z: 0}
   m_LocalScale: {x: 2.6075664, y: 2.4859934, z: 2.6075664}
   m_Children: []
   m_Father: {fileID: 0}
@@ -659,11 +659,11 @@ Transform:
   m_Father: {fileID: 1977086579}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &606763734 stripped
+--- !u!1 &769356156 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4339246075291716380, guid: 8b98d6728440b3a4998023c864023ccb,
+  m_CorrespondingSourceObject: {fileID: 2663576880102764607, guid: e93122a056e2d714184abead7d52a77e,
     type: 3}
-  m_PrefabInstance: {fileID: 1726970149269993885}
+  m_PrefabInstance: {fileID: 4637786494667341610}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &948300576
 PrefabInstance:
@@ -1572,7 +1572,7 @@ MonoBehaviour:
   patrolMaxPositionX: 27.34
   checkingTime: 3
   alertDelayTime: 3
-  player: {fileID: 606763734}
+  player: {fileID: 769356156}
   leg: {fileID: 1017741934}
   hand: {fileID: 1293668489}
   direction: 1

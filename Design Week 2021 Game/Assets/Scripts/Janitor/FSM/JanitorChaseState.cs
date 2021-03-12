@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class JanitorChaseState : JanitorBaseState
 {
+    private FMOD.Studio.EventInstance HeartBeatFastInstance;
+
     public override void Init(GameObject _owner, FSM _fsm)
     {
         base.Init(_owner, _fsm);
@@ -14,6 +16,9 @@ public class JanitorChaseState : JanitorBaseState
     {
         controller.state = JanitorController.States.Chase;
         controller.legAnimator.SetBool("Chase", true);
+
+        HeartBeatFastInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Janitor/HeartBeatsFast");
+        HeartBeatFastInstance.start();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,12 +37,22 @@ public class JanitorChaseState : JanitorBaseState
             {
                 fsm.ChangeState(fsm.PatrolState);
                 controller.legAnimator.SetBool("Chase", false);
+                FMODUnity.RuntimeManager.PlayOneShot("event:/Janitor/GiveUp");
             }
             
         }
         else
         {
+            if (direction != controller.direction)
+            {
+                controller.direction = direction;
+                controller.FlipCharacter();
+            }
             controller.transform.position += new Vector3(direction * Time.deltaTime * controller.chaseSpeed, 0, 0);
+
+            HeartBeatFastInstance.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE playbackstate);
+            if (playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPED || playbackstate == FMOD.Studio.PLAYBACK_STATE.STOPPING)
+                HeartBeatFastInstance.start();
         }
     }
 

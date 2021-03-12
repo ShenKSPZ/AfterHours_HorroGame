@@ -110,8 +110,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //if (State != PlayerState.Lock)
-        //    EventCenter.I().Triggered("GetCaught");
+        /*if (State != PlayerState.Lock)
+            EventCenter.I().Triggered("GetCaught");*/
 
         StateCheck();
         if (FlipX)
