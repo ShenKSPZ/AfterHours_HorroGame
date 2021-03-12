@@ -11,7 +11,7 @@ public class BackGroundMusic : MonoBehaviour
     public float Volume;
     List<FMOD.Studio.EventInstance> instances = new List<FMOD.Studio.EventInstance>();
 
-    private void OnEnable()
+    private void Start()
     {
         for (int i = 0; i < Audio.Count; i++)
         {
