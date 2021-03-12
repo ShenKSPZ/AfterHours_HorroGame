@@ -4,6 +4,9 @@ using UnityEngine;
 using FunctionExtend;
 using UnityEngine.UI;
 using FMODUnity;
+using Framework;
+
+
 public enum PlayerState
 {
     Free,
@@ -99,6 +102,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        EventCenter.I().Triggered("GetCaught");
+
         StateCheck();
         if (FlipX)
             transform.eulerAngles = Vector3.zero;
