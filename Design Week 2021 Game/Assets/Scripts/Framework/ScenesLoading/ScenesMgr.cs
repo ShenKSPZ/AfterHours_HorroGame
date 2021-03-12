@@ -102,8 +102,8 @@ namespace Framework
             //Fade Out UI
             DOTween.Kill(Background);
             DOTween.Kill(TextUI);
-            TextUI.DOColor(new Color(TextUI.color.r, TextUI.color.r, TextUI.color.r, 0), 0.2f);
-            Background.DOColor(new Color(Background.color.r, Background.color.g, Background.color.b, 0), 0.4f);
+            TextUI.DOColor(new Color(TextUI.color.r, TextUI.color.r, TextUI.color.r, 0), 2f);
+            Background.DOColor(new Color(Background.color.r, Background.color.g, Background.color.b, 0), 4f);
             //触发加载完毕的委托
             funtion?.Invoke(); //function不为空则执行
 
