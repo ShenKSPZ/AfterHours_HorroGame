@@ -236,4 +236,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackscreen: {fileID: 1819297362974165366}
-  BlackScreenSpeed: 0.1
+  Hands: {fileID: 0}
+  BlackScreenSpeed: 3
