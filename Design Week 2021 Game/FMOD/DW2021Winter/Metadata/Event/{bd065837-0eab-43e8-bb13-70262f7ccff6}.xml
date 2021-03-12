@@ -149,35 +149,32 @@
 	</object>
 	<object class="MixerBusPanner" id="{76363350-2f85-49fb-acf4-759035d886c6}" />
 	<object class="SFXReverbEffect" id="{a95d6616-5df2-4592-a4fd-24d5fe37c657}">
-		<property name="earlyDelay">
-			<value>162</value>
+		<property name="decayTime">
+			<value>7200</value>
 		</property>
 		<property name="lateDelay">
-			<value>88</value>
+			<value>30</value>
 		</property>
 		<property name="HFDecayRatio">
-			<value>54</value>
-		</property>
-		<property name="diffusion">
-			<value>79</value>
+			<value>33</value>
 		</property>
 		<property name="highCut">
-			<value>760</value>
+			<value>4500</value>
 		</property>
 		<property name="earlyLateMix">
-			<value>94</value>
+			<value>80</value>
 		</property>
 		<property name="wetLevel">
-			<value>-12.3000002</value>
+			<value>-9.60000038</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{2dd28f21-3aa5-40da-a6b8-b0c84438eca2}" />
 	<object class="SpatialiserEffect" id="{ccdaa3d2-2308-434c-bce7-cae347a3014a}">
 		<property name="minimumDistance">
-			<value>3.20000005</value>
+			<value>4</value>
 		</property>
 		<property name="maximumDistance">
-			<value>49.5</value>
+			<value>60.5</value>
 		</property>
 	</object>
 	<object class="RandomizerModulator" id="{95f8adf3-7483-446f-95db-bf2e98cd4efc}">

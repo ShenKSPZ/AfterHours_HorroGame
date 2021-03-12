@@ -40,7 +40,21 @@ public class PostEffect : MonoBehaviour
     IEnumerator CameraShaking()
     {
         Camera.main.transform.DOShakePosition(5f, 0.1f, 100, 90, false, false);
-        yield return new WaitForSeconds(5f);
+
+        if(volume == null)
+            GetVolume();
+        volume.profile.TryGet(out FilmGrain grain);
+        volume.profile.TryGet(out Vignette vig);
+
+        while(grain.intensity.value < 1 || vig.intensity.value < 0.5f)
+        {
+            if (vig.intensity.value < 0.5f)
+                vig.intensity.value += Time.deltaTime * 0.1f;
+
+            if (grain.intensity.value < 1)
+                grain.intensity.value += Time.deltaTime * 0.1f;
+            yield return null;
+        }
     }
 
     public void BlackScreen()

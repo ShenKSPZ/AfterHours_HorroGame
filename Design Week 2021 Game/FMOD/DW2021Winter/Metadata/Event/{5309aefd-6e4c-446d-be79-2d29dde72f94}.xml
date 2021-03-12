@@ -140,26 +140,33 @@
 	</object>
 	<object class="MixerBusPanner" id="{7a0186ce-182e-45ca-8dc2-2c2adb2eaba8}" />
 	<object class="SFXReverbEffect" id="{eee87390-b240-4194-bf9f-109883a2832a}">
-		<property name="earlyDelay">
-			<value>7</value>
+		<property name="decayTime">
+			<value>7200</value>
 		</property>
 		<property name="lateDelay">
-			<value>11</value>
+			<value>30</value>
 		</property>
 		<property name="HFDecayRatio">
-			<value>59</value>
+			<value>33</value>
 		</property>
 		<property name="highCut">
-			<value>7800</value>
+			<value>4500</value>
 		</property>
 		<property name="earlyLateMix">
-			<value>87</value>
+			<value>80</value>
 		</property>
 		<property name="wetLevel">
-			<value>-5.5</value>
+			<value>-9.60000038</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{af5ceb94-a177-4c0b-a154-d63cc5f4081a}" />
-	<object class="SpatialiserEffect" id="{02196187-3093-4909-8cf7-fce1bb9e9e3d}" />
+	<object class="SpatialiserEffect" id="{02196187-3093-4909-8cf7-fce1bb9e9e3d}">
+		<property name="minimumDistance">
+			<value>4</value>
+		</property>
+		<property name="maximumDistance">
+			<value>60.5</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{8bd76dba-1f32-4c2b-9626-00642b7d41f8}" />
 </objects>
