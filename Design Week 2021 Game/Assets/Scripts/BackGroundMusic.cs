@@ -16,11 +16,20 @@ public class BackGroundMusic : MonoBehaviour
         for (int i = 0; i < Audio.Count; i++)
         {
             instances.Add(RuntimeManager.CreateInstance(Audio[i]));
-            instances[i].start();
             instances[i].setVolume(Volume);
         }
 
         EventCenter.I().AddListener("StopBGM", Stop);
+
+        Invoke("Play", 0.5f);
+    }
+
+    void Play()
+    {
+        for (int i = 0; i < instances.Count; i++)
+        {
+            instances[i].start();
+        }
     }
 
     private void OnDisable()
