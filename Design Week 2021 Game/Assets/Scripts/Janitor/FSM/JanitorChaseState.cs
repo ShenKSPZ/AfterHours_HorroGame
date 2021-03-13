@@ -17,6 +17,7 @@ public class JanitorChaseState : JanitorBaseState
         controller.state = JanitorController.States.Chase;
         controller.legAnimator.SetBool("Chase", true);
 
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Janitor/Chasing");
         HeartBeatFastInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Janitor/HeartBeatsFast");
         HeartBeatFastInstance.start();
     }

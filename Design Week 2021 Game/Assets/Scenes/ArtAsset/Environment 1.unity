@@ -1744,6 +1744,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7748631419880035619}
+    - target: {fileID: 4803713943289548258, guid: 0b83a0f88ea113b438edae9e676dc828,
+        type: 3}
+      propertyPath: chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4803713943289548259, guid: 0b83a0f88ea113b438edae9e676dc828,
         type: 3}
       propertyPath: m_RootOrder

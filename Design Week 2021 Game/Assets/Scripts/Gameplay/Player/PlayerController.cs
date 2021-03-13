@@ -482,7 +482,8 @@ public class PlayerController : MonoBehaviour
         Rig.isKinematic = false;
         ActualOnGround = true;
         OnGround = true;
-        State = next;
+        if(State != PlayerState.Lock)
+            State = next;
         yield return new WaitForEndOfFrame();
     }
 
